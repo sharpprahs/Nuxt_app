@@ -20,7 +20,7 @@ export default {
   methods: {
     async fetchDataFromAPI() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/posts");
+        const response = await fetch("http://localhost:8000/api/posts");
         if (response.ok) {
           this.data = await response.json();
         } else {
