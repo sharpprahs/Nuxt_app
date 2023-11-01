@@ -10,7 +10,7 @@
 
 <script setup>
 const id = ref(1)
-const { data: product, error } = await useFetch(() => `http://localhost:8000/api/posts`)
+const { data: product, error } = await useFetch(() => `https://sharpsss.ru/api/posts`)
 
 </script>
 
