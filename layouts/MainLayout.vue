@@ -1,5 +1,5 @@
 <template>
-<TopNav/>
+  <TopNav/>
   <div class="content_container">
     <NuxtPage/>
   </div>
