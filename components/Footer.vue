@@ -24,7 +24,8 @@
 </div>
       <div class="footer_content_container">
         <div class="footer_title mm">Админ панель</div>
-        <NuxtLink class="authorization_admin_panel_button_footer" to="/content/Admin">Войти</NuxtLink>
+        <NuxtLink  v-if="!authStore.isAuthenticated"  class="authorization_admin_panel_button_footer" to="/content/Admin">Войти</NuxtLink>
+        <NuxtLink  v-if="authStore.isAuthenticated"  class="authorization_admin_panel_button_footer bc_red" @click="logout">Выйти</NuxtLink>
       </div>
     </div>
 
@@ -36,8 +37,35 @@
 </footer>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+import axios from "axios";
+import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
+const authStore = useAuthStore(); // Используем наше хранилище
+const isAuthenticated = ref(false);
 
+onMounted(() => {
+  authStore.isAuthenticated = !!localStorage.getItem('token');
+});
+
+async function logout() {
+  try {
+    // Отправляем запрос на выход из системы на сервер
+    await axios.post('http://localhost:8000/api/logout', {}, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    authStore.logout(); // Вызываем действие logout в нашем хранилище
+    // Перенаправляем пользователя на главную страницу
+    router.push('/content/admin');
+  } catch (error) {
+    console.error('Ошибка при выходе:', error);
+  }
+}
 </script>
 
 <style scoped>

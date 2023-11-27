@@ -160,7 +160,7 @@ fieldset[disabled] .multiselect {
     padding: 8px 40px 0 35px;
     border-radius: 5px;
     background: transparent;
-    font-size: 14px;
+    font-size: 16px;
 }
 .multiselect__tags::before{
     content: "";
@@ -171,8 +171,11 @@ fieldset[disabled] .multiselect {
     transform: translateY(-50%);
     top: 50%;
     left: 0;
-    background-image: url(../images/svg/lang.svg);
+    background-image: url(../images/svg/lang_v1.svg);
     background-repeat: no-repeat;
+}
+._rss .multiselect__tags::before{
+    background-image: url(../images/svg/lang_v2.svg);
 }
 
 .multiselect__tag {

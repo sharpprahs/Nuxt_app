@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +19,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    // Защищенные маршруты
+//    Route::get('/users', [UserController::class, 'index']);
+//    Route::put('/users/update-accesses', [UserController::class, 'updateAccesses']);
+//    Route::delete('/teacher/delete/{id}', [TeacherController::class, 'delete_teacher']);
+    Route::get('/all_languages', [LanguageController::class, 'index']);
+    Route::delete('/language_delete/{id}', [LanguageController::class, 'destroy']);
+    Route::post('/languages_add', [LanguageController::class, 'store']);
+    Route::get('/all_sections', [SectionController::class, 'index']);
+    Route::delete('/section_delete/{id}', [SectionController::class, 'destroy']);
+    Route::post('/section_add', [SectionController::class, 'store']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/exercises', [ExerciseController::class, 'getThemes']);
 });
-Route::get('/posts', [PostsController::class, 'index']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+

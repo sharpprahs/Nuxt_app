@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   pages: true,
   css: ['~/assets/css/style.css'],
   devtools: { enabled: true },
+  modules: ['@pinia/nuxt'],
   app: {
     head: {
       meta: [
