@@ -4,10 +4,10 @@
   <button class="container_nav_panel__show_admin mr" @click="show_menu_mobile_params"><span>{{title_button}}</span></button>
 <!--сюда кнопку на мобилку-->
   <div class="container_nav_panel_admin">
+    <h1 class="general_title mr">
+      <span class="mr">Панель Администратора</span>
+    </h1>
     <div class="container_nav_panel_content_admin">
-  <h1 class="general_title mr">
-    <span class="msb">Админ панель</span>
-  </h1>
     <div class="selects_lang_answer_and_task_admin">
      <div class="selects_lang_answer_and_task__block_admin mr">
       <div>Язык заданий</div>

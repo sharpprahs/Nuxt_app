@@ -1,7 +1,7 @@
 <template>
 <footer>
 <div class="footer_container mr">
-  <NuxtLink to="/" class="home_page mm"><span class="img_logo"></span><span>Linvistics</span></NuxtLink>
+  <NuxtLink to="/" class="home_page mm"><span class="mcfb">LIN</span><span class="mc">VISITICS</span><br>Речевой тренажёр</NuxtLink>
   <div class="footer_information">
     <div class="copyright_container">
       <div class="copyright_title mm">
