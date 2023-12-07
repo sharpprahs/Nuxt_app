@@ -22,9 +22,11 @@
 <script setup>
 import {ref} from 'vue'
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+// import axios from 'axios';
 import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
 const authStore = useAuthStore(); // Используем наше хранилище
+// import { useRuntimeConfig } from '#imports'; // Импортирует конфигурацию Nuxt
+import { getCookie } from 'cookies-next'; // Импорт функции для получения кук
 
 const loginData = ref({
   name: '',
@@ -35,12 +37,14 @@ const showError = ref(false);
 const errorMessage = ref('');
 const router = useRouter();
 
+
 function show_password() {
   document.querySelector('.show_password').classList.toggle('_active');
     type_password.value = type_password.value === 'password' ? 'text' : 'password';
 }
 
 async function login() {
+  // const config = useRuntimeConfig();
   if (!loginData.value.name || !loginData.value.password) {
     showError.value = true;
     errorMessage.value = "Пожалуйста, заполните все поля.";
@@ -48,17 +52,35 @@ async function login() {
   }
 
   try {
-    const response = await axios.post('http://localhost:8000/api/login', loginData.value);
+    // Получение CSRF токена
+    await $fetch(`/api/sanctum/csrf-cookie`,{
+      method: 'GET',
+      credentials: 'include',
+    });
 
-    if (response.data && response.data.token) {
-      localStorage.setItem('token', response.data.token);
+    const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
+    console.log('CSRF token received:', token);
+
+    // Отправка запроса на авторизацию
+    const response = await $fetch(`/api/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'X-XSRF-TOKEN': token,
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: loginData.value, // Теперь мы передаем объект напрямую
+    });
+
+    // Проверка успешной авторизации
+    if (response && response.message === 'Авторизация успешна') {
       router.push('/content/Admin_panel');
-      // Вызовите мутацию для обновления состояния аутентификации в store
-      authStore.initializeAuthentication(); // Устанавливаем аутентификацию в true
-      errorMessage.value = null;
-      showError.value = false;
-      // В функции login
-      console.log("Аутентификация:", authStore.isAuthenticated);
+      authStore.setAuthentication(true); // Устанавливаем аутентификацию в true
+      // Установить состояние аутентификации при успешном входе
+      localStorage.setItem('isAuthenticated', '1');
+      console.log("Аутентификация прошла успешно");
     }
   } catch (error) {
     if (error.response) {

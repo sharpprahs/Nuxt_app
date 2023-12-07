@@ -1,13 +1,16 @@
 // middleware/auth.js
+import { defineNuxtRouteMiddleware, useCookie } from 'nuxt/app';
+import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
+const authStore = useAuthStore(); // Используем наше хранилище
 
-// middleware/auth.js
-export default defineNuxtRouteMiddleware((to, from) => {
-    // Проверка, выполняется ли код на стороне клиента
-    if (process.client) {
-        if (!!localStorage.getItem('token')) {
-            console.log("Пользователь не аутентифицирован");
+export default defineNuxtRouteMiddleware(() => {
+    if (process.server) {
+        const cookie = useCookie('auth_token');
+        if (!cookie.value) {
+            authStore.setAuthentication(false);
+            return { path: '/content/admin' }; // Перенаправление на страницу входа
         } else {
-            return navigateTo('/content/Admin');
+            authStore.setAuthentication(true);
         }
     }
 });

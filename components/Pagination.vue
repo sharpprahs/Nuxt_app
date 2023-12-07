@@ -9,7 +9,7 @@
       </li>
       <li class="page-item" :class="{ disabled: currentPage <= 1 }">
         <a class="page-link page-link-left" href="#" @click.prevent="setCurrentPage(currentPage - 1)">
-          <img src="../assets/images/svg/arrow.svg" alt="Вернуться к предыдущим заданиям">
+          <img src="../assets/images/svg/arrow_right_g.svg" alt="Вернуться к предыдущим заданиям">
         </a>
       </li>
       <!-- Начальное многоточие -->
@@ -33,7 +33,7 @@
       <!-- Следующая страница -->
       <li class="page-item" :class="{ disabled: currentPage >= pageCount }">
         <a class="page-link" href="#" @click.prevent="setCurrentPage(currentPage + 1)">
-          <img src="../assets/images/svg/arrow.svg" alt="Перейти к следующим заданиям">
+          <img src="../assets/images/svg/arrow_right_g.svg" alt="Перейти к следующим заданиям">
         </a>
       </li>
       <li class="page-item" :class="{ disabled: currentPage >= pageCount }" v-if="lastValue">

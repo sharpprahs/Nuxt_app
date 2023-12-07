@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -14,7 +15,6 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('name', 'password');
-
         $user = User::where('name', $credentials['name'])->first();
 
         if (!$user) {
@@ -27,20 +27,37 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+
+            // Создание токена
             $token = $user->createToken('authToken')->plainTextToken;
 
+            // Разделение токена на две части
+            [$id, $token] = explode('|', $token, 2);
+
+            // Установка HttpOnly куки с токеном
+            $cookie = cookie('auth_token', $token, 60); // Установка куки на 60 минут
+
+            // Возвращаем ответ с установленной кукой
             return response()->json([
-                'token' => $token
-            ], 200);
-        } else {
-            return response()->json(['message' => 'Произошла ошибка аутентификации'], 401);
+                'message' => 'Авторизация успешна',
+                'user' => $user,
+            ])->withCookie($cookie);
         }
+
+        return response()->json(['message' => 'Неверный логин или пароль'], 401);
     }
+
 
     // Метод для выхода пользователя
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out']);
+        // Удаляем токен пользователя
+        $request->user()->tokens()->delete();
+
+        // Удаляем куку
+        $cookie = Cookie::forget('auth_token');
+
+        return response()->json(['message' => 'Вы вышли из системы'])->withCookie($cookie);
     }
+
 }

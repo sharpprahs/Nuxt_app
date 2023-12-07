@@ -21,9 +21,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     // Защищенные маршруты
-//    Route::get('/users', [UserController::class, 'index']);
-//    Route::put('/users/update-accesses', [UserController::class, 'updateAccesses']);
-//    Route::delete('/teacher/delete/{id}', [TeacherController::class, 'delete_teacher']);
     Route::get('/all_languages', [LanguageController::class, 'index']);
     Route::delete('/language_delete/{id}', [LanguageController::class, 'destroy']);
     Route::post('/languages_add', [LanguageController::class, 'store']);
@@ -32,6 +29,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/section_add', [SectionController::class, 'store']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/exercises', [ExerciseController::class, 'getThemes']);
+    Route::post('/exercises_create', [ExerciseController::class, 'create']);
+    Route::get('/exercises_check_theme', [ExerciseController::class, 'checkIfThemeExists']);
+    Route::get('/get-exercises', [ExerciseController::class, 'getExercises']);
+    Route::post('/add-exercise', [ExerciseController::class, 'addExercise']);
+    Route::post('/delete-exercises', [ExerciseController::class, 'deleteExercises']);
+    Route::post('/delete-task-exercise', [ExerciseController::class, 'deleteTaskExercise']);
 });
 Route::post('register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

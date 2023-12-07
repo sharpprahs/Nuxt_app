@@ -58,6 +58,7 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect {
+    z-index: 9999999999;
     box-sizing: content-box;
     display: block;
     position: relative;

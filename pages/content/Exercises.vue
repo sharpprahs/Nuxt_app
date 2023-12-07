@@ -4,10 +4,11 @@
   <button class="container_nav_panel__show mr" @click="show_menu_mobile_params"><span>{{title_button}}</span></button>
 <!--сюда кнопку на мобилку-->
   <div class="container_nav_panel">
+    <h1 class="general_title mr">
+      <span class="mr">Параметры</span>
+    </h1>
     <div class="container_nav_panel_content">
-  <h1 class="general_title mm">
-    <span class="msb">Linvistics</span> <br>Параметры тренажёра
-  </h1>
+
     <div class="selects_lang_answer_and_task">
      <div class="selects_lang_answer_and_task__block mr">
       <div>Язык заданий</div>

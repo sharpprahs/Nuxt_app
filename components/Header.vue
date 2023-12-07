@@ -25,7 +25,7 @@ class="header_menu_navigation_pc_container"
         </ul>
       </li>
       <li>
-        <a href="" class="switch_mode_dl msb">Dark</a>
+        <a class="switch_mode_dl msb">Dark</a>
       </li>
     </ul>
 
@@ -33,31 +33,27 @@ class="header_menu_navigation_pc_container"
     <div class="menu_icon" :class="{ '_active': showMobileMenu === true  }" @click="showNav"><span></span></div>
   </div>
   <nav class="mobile_navigation" v-if="showMobileMenu">
-    <ul class="mm">
+    <ul class="mobile_container_header mm">
       <li>
-        <NuxtLink to="/" :class="{ 'active_page': $route.path === '/' }" @click="showMobileMenu = false">
-          Главная
-        </NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/content/Exercises" :class="{ 'active_page': $route.path === '/content/Exercises' }" @click="showMobileMenu = false">
+        <NuxtLink to="/content/Exercises" :class="{ 'active_page': $route.path === '/content/Exercises' }">
           Упражнения
         </NuxtLink>
       </li>
       <li>
         <NuxtLink @click="showMobileMenu = false">
-          О нас
+          О проекте
         </NuxtLink>
       </li>
       <li>
-        <ul class="contact_links_container">
-          <li><a href="sd" target="_blank"> <img src="../assets/images/svg/tg.svg" alt="Telegram account Linvistics"></a></li>
-          <li><a href="dd" target="_blank"><img src="../assets/images/svg/dzen.svg" alt="Dzen account Linvistics"></a></li>
-          <li><a href="zz" target="_blank"><img src="../assets/images/svg/vk.svg" alt="Vk account Linvistics"></a></li>
+        <a class="contact_links">Контакты</a>
+        <ul class="dropdown">
+          <li><a href="#" class="tg_before">Telegram</a></li>
+          <li><a href="#" class="vk_before">VK</a></li>
+          <li><a href="#" class="dzen_before">Dzen</a></li>
         </ul>
       </li>
-      <li class="dev mr">
-        <a href="https://t.me/sharpsss" target="_blank">sharpsss.dev</a>
+      <li>
+        <a class="switch_mode_dl msb">Dark</a>
       </li>
     </ul>
   </nav>

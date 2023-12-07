@@ -9,7 +9,7 @@
     </h1>
     <div class="container_nav_panel_content_admin">
     <div class="selects_lang_answer_and_task_admin">
-     <div class="selects_lang_answer_and_task__block_admin mr">
+     <div class="selects_lang_answer_and_task__block_admin special_index_z mr">
       <div>Язык заданий</div>
        <multiselect
            v-model="active_params_task.task_lang_active"
@@ -47,14 +47,14 @@
             class="_rss"
         > <template #noResult>Такого языка нету</template>
         </multiselect>
-        <button class="add_theme_sections_admin" @click="() => openPopup('is_visible_edit_languages')">{{ popup_state.edit_languages }}</button>
+        <button class="button_search_content mr atsa_pt" @click="() => openPopup('is_visible_edit_languages')">{{ popup_state.edit_languages }}</button>
       </div>
       <UIPopup   :show="popup_state.is_visible_edit_languages"
                  :title_popup="popup_state.edit_languages"
                  @close="() => closePopup('is_visible_edit_languages')"
       >
         <div class="popup_panel_container">
-          <div class="mm popup_panel_container__title mcb">Удаление языка</div>
+          <div class="mm popup_panel_container__title">Удаление языка</div>
           <div class="languages_edit" v-for="lang in options_language" key="lang.code">
           <span>{{ lang.name}}</span>
             <button @click="delete_language(lang.id)">Удалить</button>
@@ -73,24 +73,27 @@
         </div>
       </UIPopup>
     </div>
+      <div class="theme_sections_admin_container">
       <div class="theme_sections_admin mr">
         <h2 class="mr" id="theme_tasks">Разделы</h2>
         <transition-group name="fall" tag="div" class="section_container_all">
         <button class="theme_sections" v-for="section in all_sections" :key="section.code" @click="active_section(section)"  :class="{ '_active': active_params_task.section_active?.code === section.code }">{{section.name}}</button>
         </transition-group>
-          <button class="add_theme_sections_admin mr" @click="() => openPopup('is_visible_theme_sections')"><span>{{ popup_state.theme_sections_title }}</span></button>
+          <button class="button_search_content atsa_pt  mr" @click="() => openPopup('is_visible_theme_sections')">{{ popup_state.theme_sections_title }}</button>
+      </div>
       </div>
 <UIPopup   :show="popup_state.is_visible_theme_sections"
            :title_popup="popup_state.theme_sections_title"
            @close="() => closePopup('is_visible_theme_sections')"
 >
 <div class="popup_panel_container">
-  <div class="mm popup_panel_container__title mcb">Удаление раздела</div>
+  <div class="mm popup_panel_container__title">Удаление раздела</div>
   <div class="languages_edit" v-for="section in all_sections" key="section.code">
     <span>{{ section.name}}</span>
     <button @click="delete_section(section.id)">Удалить</button>
   </div>
   <div class="popup_panel_container__input">
+    <div class="mm popup_panel_container__title mc">Добавление раздела</div>
     <label for="name_section">Сокращённая абреввиатура раздела <span class="mc">ENG</span></label>
     <input type="text" v-model="code_section_add"  placeholder="Введите абреввиатуру" aria-labelledby="name_section" id="name_section">
   </div>
@@ -102,37 +105,42 @@
   <UIButton @click="addSection">Добавить раздел</UIButton>
 </div>
 </UIPopup>
-    <div class="search_task_theme_admin mr">
+
       <UIPopup   :show="popup_state.is_visible_add_theme"
                  :title_popup="popup_state.add_theme"
                  @close="() => closePopup('is_visible_add_theme')"
       >
         <div class="popup_panel_container">
           <div class="popup_panel_container__input">
-            <label for="name_section">Сокращённая абреввиатура раздела <span class="mc">ENG</span></label>
-            <input type="text" placeholder="Введите абреввиатуру" aria-labelledby="name_section" id="name_section">
+            <div class="mm popup_panel_container__title mc">Добавление темы</div>
           </div>
           <div class="popup_panel_container__input">
-            <label for="title_section">Название раздела</label>
-            <input type="text" placeholder="Введите название" aria-labelledby="title_section" id="title_section">
+            <label for="title_section">Название темы</label>
+            <input type="text" v-model="theme_add_name" placeholder="Введите название" aria-labelledby="title_section" id="title_section">
           </div>
-          <UIButton>Добавить раздел</UIButton>
+          <span ref="messageElement_them" class="message_theme_add" v-if="message_theme_add != null">{{message_theme_add}}</span>
+          <UIButton @click="addTheme">Добавить тему</UIButton>
         </div>
       </UIPopup>
+<div class="theme_container_section_container">
+      <div class="theme_container_section">
 <h2 class="mr" id="theme_tasks">Темы</h2>
-    </div>
 <div class="wait_panda_container" v-if="active_params_task.answer_lang_active == null || active_params_task.task_lang_active == null || active_params_task.section_active == null">
 <span ref="textElement" class="mm"></span>
   <img src="../../assets/images/gif/wait_panda.gif" alt="Жду выбора раздела,языка заданий, языка вопросов">
 </div>
       <div class="theme_all_section" v-if="active_params_task.answer_lang_active !=null && active_params_task.task_lang_active != null && active_params_task.section_active != null">
-      <button class="add_theme_admin mr" @click="() => openPopup('is_visible_add_theme')"><span>{{ popup_state.add_theme}}</span></button>
-      <input type="text" class="search_content_admin mr" placeholder="Найти" aria-labelledby="theme_tasks">
-      <button class="button_search_content_admin mm">Найти</button>
+      <button class="button_search_content mr" @click="() => openPopup('is_visible_add_theme')"><span>{{ popup_state.add_theme}}</span></button>
+      <div class="input_container">
+        <input type="text" class="search_content_admin mr" placeholder="Поиск" aria-labelledby="theme_tasks" v-model="search_theme">
+      <button class="button_search_content_admin" @click="search_this_theme">
+        <img src="../../assets/images/svg/search.svg" alt="Поиск темы">
+      </button>
+      </div>
     <nav class="theme_tasks_navigation_admin">
 <ul>
   <transition-group name="fall" tag="ul">
-  <li v-for="item in theme_items" :key="item.id" @click="download_active_theme(item.name)" :class="{ '_active': active_params_task.theme_active === item.name }"><h3><a>{{ item.name}}</a></h3></li>
+  <li v-for="item in theme_items" :key="item.name" @click="download_active_theme(item.name)" :class="{ '_active': active_params_task.theme_active === item.name }"><h3><a>{{ item.name}}</a></h3></li>
   </transition-group>
 </ul>
     </nav>
@@ -149,31 +157,28 @@
       />
     </div>
     </div>
+        </div>
+      </div>
    </div>
   </div>
 </div>
    <div class="container_tasks_admin mr">
-
+<div class="before_loading_theme_container_general">
+  <div class="alert_container" :class="style_alert" v-if="status_alert">
+    <span>{{message_alert}}</span>
+  </div>
 <div class="before_loading_theme_container mr">
   <div class="loading_status_text" v-if="active_params_task.theme_active == null">В Панели Администратора выберите <div class="loading_status_text_spans"><span class="mc_v2" v-if="active_params_task.task_lang_active == null">ㅤЯзык заданийㅤ</span><span class="mcr" v-if="active_params_task.answer_lang_active == null">ㅤЯзык ответаㅤ</span><span class="mcf" v-if="active_params_task.section_active == null">ㅤРазделㅤ</span><span class="mcb" v-if="active_params_task.theme_active == null">ㅤТемуㅤ</span></div></div>
 <div class="task_theme_active_container" v-if="active_params_task.theme_active != null">
-  <h4 class="msb task_theme_active_title">Present simple</h4>
+  <h4 class="msb task_theme_active_title">{{active_params_task.theme_active}}</h4>
 <div class="task_theme_active_container__params">
   <div class="amount_task_container mr">
-    <div>Всего заданий</div><span class="amount_task mm">8</span>
+    <div>Всего заданий</div><span class="amount_task mm">{{amount_task}}</span>
   </div>
-  <button class="mr"><span>Удалить тему</span></button>
 </div>
 
 </div>
 
-  <!--  <h4 class="task_theme_title_container">-->
-<!--    <img src="../../assets/images/svg/delete_task.svg" alt="Удалить текущую тему">-->
-<!--    Present simple-->
-<!--  </h4>-->
-<!--  <div>-->
-<!--    Всего заданий<span class="amount_task mm">8</span>-->
-<!--  </div>-->
  <div class="image_status_loading__container">
 <div class="image_status_loading_pillar mm">
   <div class="task_params_active_status _lang_a">
@@ -185,20 +190,33 @@
   <div class="task_params_active_status _lang_t">
  {{ active_params_task.section_active?.code }}
   </div>
-
 </div>
  </div>
 </div>
+  <div class="theme_del_add_container" v-if="active_params_task.theme_active != null">
+  <div class="theme_del_add">
+    <button class="panel_button" :class="status_click" @click="save_themes('mcob alert_info', 'Сохраните изменения каждого упражнения по отдельности')">
+      <img src="../../assets/images/svg/save_item.svg" alt="Сохранить тему">
+    </button>
+    <button class="panel_button" :class="status_click"  @click="add_task()">
+      <img src="../../assets/images/svg/add_item_v2.svg" alt="Добавить тему">
+    </button>
+    <button class="panel_button" :class="status_click" @click="delete_task()">
+      <img src="../../assets/images/svg/item_delete.svg" alt="Удалить тему">
+    </button>
+  </div>
+  </div>
 
-
+</div>
+<div class="container_tasks__theme_admin_container" v-for="item in tasks" :key="item.number_task">
      <div class="container_tasks__theme_admin" v-if="active_params_task.theme_active != null">
-       <div class="container_amount_task_answer_admin">
-       </div>
+<!--       <component :is="getComponent(item.type)" :item="item" @file-uploaded="updateContent" ></component>-->
+
        <div class="container_task_admin">
          <div class="container_task__status_admin">
-           <h5 class="mr h5_titles">1 Задание</h5>
+           <h5 class="mr h5_titles">{{item.number_task}} Задание</h5>
          </div>
-         <div class="content_container_admin">
+         <div class="content_container_admin special_index_z">
          <div class="choice_content_task_panel_admin">
            <multiselect
                class="choice_task_select_admin"
@@ -224,49 +242,81 @@
              <div v-if="fileName" class="file-name">{{ fileName }}</div>
            </div>
          </div>
-         <img class="task_img_admin" src="../../assets/images/tasks/images_webp/works.webp" alt="Картинка рабочего правильный ответ work">
+           <component :is="getComponent(item.type)" :item="item" @file-uploaded="updateContent" ></component>
          </div>
+
          <div class="content_container_admin">
       <div class="choice_content_task_panel_admin">
         <div class="task_description_title_admin">Описание</div>
       </div>
-         <textarea type="text" class="this_task_description_admin _for_description mr">Нажмите на запись и скажите что вы видите на картинке</textarea>
+         <textarea type="text" class="this_task_description_admin _for_description mr">{{item.description}}</textarea>
          </div>
          <div class="content_container_admin">
            <div class="choice_content_task_panel_admin">
            <div class="task_description_title">Правильный ответ</div>
          </div>
-         <textarea type="text" class="this_task_description_admin _for_true_answer mr">Работа</textarea>
-           <div class="container_buttons_task">
-             <button class="do_it_button mc_bg">Сохранить</button>
-             <button class="do_it_button mcr">Удалить</button>
+         <textarea type="text" class="this_task_description_admin mr">{{item.true_answer}}</textarea>
            </div>
+         <div class="content_container_admin">
+           <div class="choice_content_task_panel_admin">
+             <div class="task_description_title">Ключевые слова</div>
            </div>
+<!--           <li v-for="(keyword, index) in splitKeywords(task.keywords)" :key="index">-->
+<!--             <button class="answer_keywords_button del_keyword">{{ keyword }}</button>-->
+<!--           </li>-->
+           <ul class="answer_keywords">
+             <li v-for="(keyword, index) in splitKeywords(item.true_keywords)" :key="index"> <button class="answer_keywords_button del_keyword"></button>{{ keyword }}</li>
+           </ul>
+           <div class="input_container">
+             <input type="text" class="search_content_admin mr" placeholder="Ключевое слово" aria-labelledby="theme_tasks">
+             <button class="answer_keywords_button add_keyword"></button>
+           </div>
+         </div>
+         <div class="buttons_admin_actions">
+           <button class="buttons_admin mc_bg">Сохранить изменения</button>
+           <button class="buttons_admin mcr" @click="deleteThisTask(item.number_task)">Удалить задание</button>
+         </div>
        </div>
-       <button class="do_it_button_add_task mr"><span>Добавить задание</span></button>
        </div>
-
+</div>
+     <div class="loading_more_line" ref="loadingRef" v-show="active_params_task.theme_active != null"><span>Привет, я печенька загружатор, я занимаюсь подгрузкой заданий из бд</span></div>
+     <button class="buttons_admin_add mcb" v-if="active_params_task.theme_active != null" @click="addExercise">Добавить задание</button>
        </div>
-   </div>
-
-<!--  <ul>-->
-<!--    <li v-for="bank in product" :key="bank.id">-->
-<!--      <h2>{{ bank.title }}</h2>-->
-<!--      <pre>{{ bank.text}}</pre>-->
-<!--    </li>-->
-<!--  </ul>-->
+  </div>
 </template>
 
 <script setup>
-import {computed, ref, reactive,nextTick, watch, onMounted} from 'vue';
+import {ref, reactive,nextTick, watch, onMounted} from 'vue';
+// import { useFetch } from '#app';
 import Multiselect from "vue-multiselect";
 import Paginate from "@/components/Pagination.vue"
 import axios from "axios";
 import "@/assets/css/MyPagination.css";
 import "@/assets/css/vue-multiselect.css";
+import {getCookie} from "cookies-next";
+import ImageUploadComponent from '@/components/ImageUpload.vue';
+import VideoUploadComponent from '@/components/VideoUpload.vue';
+import AudioUploadComponent from '@/components/AudioUpload.vue';
 definePageMeta({
   middleware: 'auth'
 });
+//Загрузка контента в упражнениях
+const getComponent = (type) => {
+  switch (type) {
+    case 'image':
+      return ImageUploadComponent;
+    case 'video':
+      return VideoUploadComponent;
+    case 'audio':
+      return AudioUploadComponent;
+    default:
+      return null;
+  }
+};
+
+const updateContent = (updatedItem) => {
+  // Обновите содержимое задания здесь
+};
 
 
 // popup
@@ -330,20 +380,34 @@ const active_params_task = reactive({
 // Метод для получения данных о темах
 const fetchThemes = async (page) => {
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8000/api/exercises', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      params: {
-        page: page,
-        id_lang_task: active_params_task.task_lang_active,
-        id_lang_answer: active_params_task.answer_lang_active,
-        id_section: active_params_task.section_active,
-        // Дополнительные параметры фильтрации могут быть добавлены здесь
-      }
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
     });
 
+    // Определение параметров запроса
+    const params = {
+      page: page,
+      id_lang_task: active_params_task.task_lang_active,
+      id_lang_answer: active_params_task.answer_lang_active,
+      id_section: active_params_task.section_active,
+      // Дополнительные параметры фильтрации могут быть добавлены здесь
+    };
+
+    // Отправка GET запроса с использованием axios
+    const response = await axios.get('http://localhost:8000/api/exercises', {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      params: params
+    });
+
+    // Обработка ответа
     theme_items.value = response.data.themes; // Обновление списка тем
     totalElements.value = response.data.total; // Обновление общего количества элементов
     currentPage.value = response.data.currentPage; // Обновление текущей страницы
@@ -427,6 +491,7 @@ watch(
 
 onMounted(() => {
   startNewText();
+
 });
 // const allItems = ref([]); // массив элементов
 
@@ -443,28 +508,55 @@ const setCurrentPage = (newPage) => {
 
 // Создаем реактивную переменную для выбранного значения
 const selectedOption_task = ref([]);
-const selectedOption_item_task = ref({ name: 'Картинка'});
 const selectedOption_answer = ref([]);
 const page = ref(10);
 
 //рендер Языков
+// Ссылка для хранения списка языков
+// const options_language = ref([]);
+
+// import { useFetch } from '#app';
+// import {getCookie} from "cookies-next";
+// // Получение CSRF токена
+// await $fetch(`http://localhost:8000/sanctum/csrf-cookie`,{
+//   method: 'GET',
+//   credentials: 'include',
+// });
+//
+// const Admin_token = decodeURIComponent(getCookie('XSRF-TOKEN'));
+// const authCookie = useCookie('auth_token');
+// const { data: options_language } = await $fetch('http://localhost:8000/api/all_languages', {
+//       method: 'GET',
+//       credentials: 'include',
+//       headers: {
+//         'X-XSRF-TOKEN': Admin_token,
+//         'Cookie': `auth_token=${authCookie.value}`,
+//         'Accept': 'application/json, text/plain, */*',
+//         'Content-Type': 'application/json',
+//         'X-Requested-With': 'XMLHttpRequest',
+//       },
+//     });
+
+// if (data.value && data.value.length > 0) {
+//   options_language.value = data.value;
+// }
+
 const fetchLanguages = async () => {
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8000/api/all_languages', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    // Отправляем запрос и сразу возвращаем ответ
+    return await $fetch('http://localhost:8000/api/all_languages', {
+      method: 'GET',
+      credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
-    return response.data;
   } catch (error) {
     console.error('Ошибка при получении данных о языках:', error);
     return [];
   }
 };
+
 const options_language = ref([]);
 onMounted(async () => {
- options_language.value = await fetchLanguages();
+  options_language.value = await fetchLanguages();
 });
 //рендер Языков конец
 
@@ -487,29 +579,43 @@ const updateMessage = async (message, addClass,color) => {
 };
 const addLanguage = async () => {
   if (!code_lang_add.value || !name_lang_add.value) {
-    updateMessage('Все поля должны быть заполнены', true, 'mcb');
+    await updateMessage('Все поля должны быть заполнены', true, 'mcfr');
     return;
   }
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.post('http://localhost:8000/api/languages_add', {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Определение параметров запроса
+    const data = {
       code: code_lang_add.value,
       name: name_lang_add.value
-    }, {
+      // Дополнительные параметры фильтрации могут быть добавлены здесь
+    };
+
+    // Отправка GET запроса с использованием axios
+    const response = await axios.post('http://localhost:8000/api/languages_add',data, {
+      withCredentials: true,
       headers: {
-        'Authorization': `Bearer ${token}`
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       }
     });
     // Добавление нового языка в список языков
     options_language.value.push(response.data);
-    updateMessage('Язык успешно добавлен', true,'mc');
+    await updateMessage('Язык успешно добавлен', true, 'mc');
 
     console.log('Язык добавлен:', response.data);
     // Очистить поля после добавления
     code_lang_add.value = null;
     name_lang_add.value = null;
   } catch (error) {
-    updateMessage('CODE языка должен быть уникальным', true, 'mcb');
+    await updateMessage('CODE языка должен быть уникальным', true, 'mcfr');
     console.error('Ошибка при добавлении языка:', error);
   }
 };
@@ -518,10 +624,19 @@ const addLanguage = async () => {
 // Удаление языка по id
 const delete_language = async (id) => {
   try {
-    const token = localStorage.getItem('token');
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
     await axios.delete(`http://localhost:8000/api/language_delete/${id}`, {
+      withCredentials: true,
       headers: {
-        'Authorization': `Bearer ${token}`
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       }
     });
     // Обновление списка языков после удаления
@@ -536,18 +651,17 @@ const delete_language = async (id) => {
 //Рендер Секций(разделов)
 const fetchSections = async () => {
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8000/api/all_sections', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    // Отправляем запрос и сразу возвращаем ответ
+    return await $fetch('http://localhost:8000/api/all_sections', {
+      method: 'GET',
+      credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
-    return response.data;
   } catch (error) {
     console.error('Ошибка при получении данных о языках:', error);
     return [];
   }
 };
+
 const all_sections = ref([]);
 onMounted(async () => {
   all_sections.value = await fetchSections();
@@ -557,14 +671,23 @@ onMounted(async () => {
 // Удаление секции по id
 const delete_section = async (id) => {
   try {
-    const token = localStorage.getItem('token');
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
     await axios.delete(`http://localhost:8000/api/section_delete/${id}`, {
+      withCredentials: true,
       headers: {
-        'Authorization': `Bearer ${token}`
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       }
     });
     // Обновление списка языков после удаления
     all_sections.value = all_sections.value.filter(section => section.id !== id);
+    active_params_task.section_active = null;
     console.log('Секция удалена:', id);
   } catch (error) {
     console.error('Ошибка при удалении секции:', error);
@@ -592,20 +715,33 @@ const updateMessage_section = async (message, addClass,color) => {
 };
 
 const addSection = async () => {
+
   console.log("Код секции",code_section_add.value, "Имя секции",name_section_add.value)
   if (!code_section_add.value || !name_section_add.value) {
-    await updateMessage_section('Все поля должны быть заполнены', true, 'mcb');
+    await updateMessage_section('Все поля должны быть заполнены', true, 'mcfr');
     return;
   }
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.post('http://localhost:8000/api/section_add', {
-      code: code_section_add.value,
-      name: name_section_add.value
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    const data = {
+        code: code_section_add.value,
+        name: name_section_add.value
+        // Дополнительные параметры фильтрации могут быть добавлены здесь
+      };
+
+    const response = await axios.post('http://localhost:8000/api/section_add',data, {
+      withCredentials: true,
+        headers: {
+          'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        }
     });
     // Добавление нового языка в список языков
     all_sections.value.push(response.data);
@@ -616,26 +752,413 @@ const addSection = async () => {
     code_section_add.value = null;
     name_section_add.value = null;
   } catch (error) {
-    await updateMessage_section('CODE раздела должен быть уникальным', true, 'mcb');
+    await updateMessage_section('CODE раздела должен быть уникальным', true, 'mcfr');
     console.error('Ошибка при добавлении языка:', error);
   }
 };
 //конец создания секции
 
+// Добавление темы
+const theme_add_name = ref(null);
+const message_theme_add = ref(null);
+const messageElement_them = ref(null);
+
+const updateMessage_theme = async (message, addClass,color) => {
+  message_theme_add.value = message;
+  if (addClass) {
+    await nextTick();
+    messageElement_them.value.classList.add(color);
+    setTimeout(() => {
+      messageElement_them.value.classList.remove(color);
+      message_theme_add.value = null;
+    }, 3000);
+  }
+};
+const addTheme = async () => {
+  if (!theme_add_name.value) {
+    await updateMessage_theme('Все поля должны быть заполнены', true, 'mcfr');
+    return;
+  }
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Определение параметров запроса
+    const data_themes = {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: theme_add_name.value,
+      // Дополнительные параметры фильтрации могут быть добавлены здесь
+    };
+
+    // Отправка GET запроса с использованием axios
+    const response = await axios.post('http://localhost:8000/api/exercises_create',data_themes, {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    });
+    // Добавление нового языка в список языков
+    await fetchThemes(1);
+    await updateMessage_theme('Тема успешно добавлена', true, 'mc');
+
+    console.log('Тема добавлена:', response.data);
+    // Очистить поля после добавления
+    theme_add_name.value = null;
+  } catch (error) {
+    await updateMessage_theme('name темы должен быть уникальным', true, 'mcfr');
+    console.error('Ошибка при добавлении языка:', error);
+  }
+};
+// Конец добавления темы
+
+//Поиск темы
+const search_theme = ref(null);
+// search_this_theme
+const search_this_theme = async () => {
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Определение параметров запроса
+    const searchParams = {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: search_theme.value,
+    };
+
+    // Отправка GET запроса с использованием axios
+    const response = await axios.get('http://localhost:8000/api/exercises_check_theme', {
+      params: searchParams,
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    });
+
+    // Обработка ответа
+    if (response.data.exists) {
+      console.log('Тема существует');
+      // theme_items.value = null;
+      theme_items.value = [{name: search_theme.value}];
+      return true;
+    } else {
+      theme_items.value = null;
+      console.log('Тема не найдена');
+      return false;
+    }
+  } catch (error) {
+    console.error('Ошибка при поиске темы:', error);
+    return false;
+  }
+};
 //Активная тема
 function download_active_theme(val){
   active_params_task.theme_active = val;
+  fetchExercises();
 }
+const amount_task = ref(null);
+const page_tasks = ref(1);
+const tasks = reactive([
+  // Пример начальных данных
+  // { number: 1, content: 'Content 1', type: 'Type 1', description: 'Description 1', true_answer: 'Answer 1', keywords: 'Keywords 1,Ало' },
+  // Другие задания...
+]);
+const splitKeywords = (keywords) => {
+  return keywords ? keywords.split(',') : [];
+};
+//Получение заданий
+const fetchExercises = async () => {
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    // Определение параметров запроса
+    const searchParams = {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: active_params_task.theme_active,
+      page: page_tasks.value,
+    };
+
+    // Отправка запроса на получение заданий
+    const response = await axios.get(`http://localhost:8000/api/get-exercises`, {
+      params: searchParams,
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    });
+
+    // Обновление реактивных переменных данными
+    tasks.splice(0, tasks.length, ...response.data.exercises.data);
+    amount_task.value = response.data.count_size;
+
+  } catch (error) {
+    console.error('Ошибка при получении заданий:', error);
+  }
+};
+
+//Подгрузка ещё заданий
+const fetchExercises_more = async () => {
+  const newPage = page_tasks.value + 1;
+  const maxPages = Math.ceil(amount_task.value / 10);
+
+  if (newPage <= maxPages) {
+    try {
+      // Получение CSRF токена
+      await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      // Определение параметров запроса
+      const searchParams = {
+        id_lang_task: active_params_task.task_lang_active?.id,
+        id_lang_answer: active_params_task.answer_lang_active?.id,
+        id_section: active_params_task.section_active?.id,
+        name: active_params_task.theme_active,
+        page: newPage,
+      };
+
+      // Отправка запроса на получение заданий
+      const response = await axios.get(`http://localhost:8000/api/get-exercises`, {
+        params: searchParams,
+        withCredentials: true,
+        headers: {
+          'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      });
+
+      // Обновление реактивных переменных данными
+      if (response.data.exercises.data.length) {
+        tasks.push(...response.data.exercises.data);
+        page_tasks.value = newPage;
+        amount_task.value = response.data.count_size;
+      }
+
+    } catch (error) {
+      console.error('Ошибка при получении заданий:', error);
+    }
+  }
+};
 //Активная тема конец
+
+//Подгрузка при скроле заданий
+const loadingRef = ref(null);
+let observer;
+const onIntersect = (entries) => {
+  if (entries[0].isIntersecting && active_params_task.theme_active != null) {
+    fetchExercises_more();
+  }
+};
+
+onMounted(() => {
+  observer = new IntersectionObserver(onIntersect, { threshold: 1.0 });
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
+
+watch(() => active_params_task.theme_active, (newValue) => {
+  if (newValue != null && loadingRef.value) {
+    observer.observe(loadingRef.value);
+  } else if (observer) {
+    observer.disconnect();
+  }
+});
+
+//Редактирование активной темы
+ //alerts status
+const status_alert = ref(false);
+const style_alert = ref(null);
+const message_alert = ref(null);
+const status_click = ref(null);
+
+function disable_buttons(){
+  status_click.value='disable_click';
+  setTimeout(() => {
+    status_click.value=null;
+  }, 4000);
+}
+function save_themes(styles,description){
+ disable_buttons();
+  alert_mes(styles,description);
+}
+function add_task(){
+  disable_buttons();
+  addExercise();
+}
+function alert_mes(styles,description){
+  status_alert.value = true;
+  style_alert.value  = styles;
+  message_alert.value  = description;
+  setTimeout(() => {
+    style_alert.value  = 'opacity_effect_off';
+  }, 3000);
+  setTimeout(() => {
+    status_alert.value = false;
+    style_alert.value  = null;
+    message_alert.value  = null;
+  }, 4000);
+}
+//alert_end
+//Удаление темы
+function delete_task(){
+  disable_buttons();
+  deleteExercises();
+}
+const deleteExercises = async () => {
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Отправка запроса на удаление заданий
+    const response = await axios.post('http://localhost:8000/api/delete-exercises', {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: active_params_task.theme_active,
+    }, {
+          withCredentials: true,
+          headers: {
+            'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        });
+
+    console.log('Ответ сервера:', response.data);
+    alert_mes('mcor alert_delete', 'Тема удалена');
+    amount_task.value = null;
+    active_params_task.theme_active=null;
+    await fetchThemes(1);
+  } catch (error) {
+    console.error('Ошибка при удалении заданий:', error);
+    alert_mes('mcor alert_info', 'Ошибка при удалении темы');
+  }
+};
+//Конец удаления темы
+//Добавление задания
+
+const addExercise = async () => {
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Отправка запроса на добавление задания
+    const response = await axios.post('http://localhost:8000/api/add-exercise', {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: active_params_task.theme_active,
+    }, {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    // Добавление нового задания в массив tasks и обновление количества заданий
+    if (response.data && response.status === 201) {
+      tasks.push(response.data);
+      amount_task.value = (amount_task.value || 0) + 1;
+      alert_mes('mcog alert_success', 'Новое задание добавлено');
+    }
+
+  } catch (error) {
+    console.error('Ошибка при добавлении задания:', error);
+    alert_mes('mcor alert_info', 'Ошибка при добавлении задания');
+  }
+};
+//Удаление задания
+const deleteThisTask = async (number) => {
+  try {
+    // Получение CSRF токена
+    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // Отправка запроса на удаление заданий
+    const response = await axios.post('http://localhost:8000/api/delete-task-exercise', {
+      id_lang_task: active_params_task.task_lang_active?.id,
+      id_lang_answer: active_params_task.answer_lang_active?.id,
+      id_section: active_params_task.section_active?.id,
+      name: active_params_task.theme_active,
+      number_task: number,
+    }, {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    console.log('Ответ сервера:', response.data);
+    // Удаление задания из массива tasks
+    const taskIndex = tasks.findIndex(task => task.number_task === number);
+    if (taskIndex !== -1) {
+      tasks.splice(taskIndex, 1);
+    }
+    // amount_task.value--1;
+    if(amount_task.value === 1){
+      active_params_task.theme_active = null;
+    } else{
+      amount_task.value--;
+    }
+    await fetchThemes(1);
+  } catch (error) {
+    console.error('Ошибка при удалении заданий:', error);
+  }
+};
+//Конец редактив темы
 
 function active_section(val){
  active_params_task.section_active = val;
 }
+const selectedOption_item_task = ref({ name: 'Картинка'});
 
 const options_task_item = [
-  { name: 'Картинка' },
-  { name: 'Видео' },
-  { name: 'Аудио' },
+  { name: 'Картинка', type: 'img' },
+  { name: 'Видео', type: 'video' },
+  { name: 'Аудио', type: 'audio' },
+  { name: 'Текст', type: 'text' },
   // ...добавьте другие языки
 ];
 
