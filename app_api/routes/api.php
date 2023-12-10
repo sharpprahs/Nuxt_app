@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AudioUploadController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\VideoUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/add-exercise', [ExerciseController::class, 'addExercise']);
     Route::post('/delete-exercises', [ExerciseController::class, 'deleteExercises']);
     Route::post('/delete-task-exercise', [ExerciseController::class, 'deleteTaskExercise']);
+    Route::post('/upload-video', [VideoUploadController::class, 'upload']);
+    Route::post('/upload-image', [ImageUploadController::class, 'upload']);
+    Route::post('/upload-audio', [AudioUploadController::class, 'upload']);
+    Route::put('/update-exercise', [ExerciseController::class, 'updateExercise']);
+
 });
 Route::post('register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

@@ -1744,7 +1744,7 @@ padding-left: 36px;
     padding-left: 5px !important;
 }
 .choice_task_select_admin{
-    margin-left: 5%;
+    /*margin-left: 5%;*/
     background-color: #FFFFFF;
     border: 1px solid var(--main_gray_v2);
     border-radius: 5px;
@@ -2874,7 +2874,53 @@ padding-left: 36px;
         margin-left: 50%; /* Перемещаем и вращаем шарик */
     }
 }
+.container_component{
+    width: 95%;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    gap:15px;
+    font-size: 16px; /* Размер шрифта */
+}
+.container_component img{
+    width: 60%;
+    height: auto;
+    border-radius: 5px;
+}
 
+.container_component video{
+    width: 100%;
+    border-radius: 5px;
+}
+.input-file {
+    display: flex;
+    position: relative;
+flex-direction: column;
+    gap:25px;
+}
+
+.input-file input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 100px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.input-file-btn {
+    background-color: var(--main_color);
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    width: fit-content;
+    border-radius: 5px;
+}
+
+.input-file-text {
+    margin-left: 10px; /* Отступ слева */
+    /* Дополнительные стили для текста */
+}
 
 @media (min-width:0px) and (max-width: 1200px) {
     .header_menu_navigation_pc{

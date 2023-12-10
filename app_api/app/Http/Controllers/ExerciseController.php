@@ -212,4 +212,44 @@ class ExerciseController extends Controller
 
         return response()->json(['message' => 'Задание успешно удалено'], 200);
     }
+    public function updateExercise(Request $request)
+    {
+        // Валидация входных данных
+        $validatedData = $request->validate([
+            'id_lang_task' => 'required|integer',
+            'id_lang_answer' => 'required|integer',
+            'id_section' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'number_task' => 'required|integer',
+            'type' => 'required|string',
+            'content_name' => 'string|nullable',
+            'description' => 'required|string',
+            'true_answer' => 'required|string',
+            'true_keywords' => 'required|string'
+        ]);
+
+
+        // Поиск задания по ключевым полям
+        $exercise = Exercise::where([
+            ['id_lang_task', $validatedData['id_lang_task']],
+            ['id_lang_answer', $validatedData['id_lang_answer']],
+            ['id_section', $validatedData['id_section']],
+            ['name', $validatedData['name']],
+            ['number_task', $validatedData['number_task']]
+        ])->firstOrFail();
+
+        // Обновление данных
+        $exercise->update([
+            'type' => $validatedData['type'],
+            'content_name' => $validatedData['content_name'],
+            'description' => $validatedData['description'],
+            'true_answer' => $validatedData['true_answer'],
+            'true_keywords' => $validatedData['true_keywords']
+        ]);
+
+        return response()->json([
+            'message' => 'Задание успешно обновлено',
+            'exercise' => $exercise
+        ]);
+    }
 }

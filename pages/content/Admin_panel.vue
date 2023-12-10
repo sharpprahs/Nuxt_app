@@ -7,6 +7,29 @@
     <h1 class="general_title mr">
       <span class="mr">Панель Администратора</span>
     </h1>
+    <UIPopup   :show="popup_state.is_visible_edit_languages"
+               :title_popup="popup_state.edit_languages"
+               @close="() => closePopup('is_visible_edit_languages')"
+    >
+      <div class="popup_panel_container">
+        <div class="mm popup_panel_container__title">Удаление языка</div>
+        <div class="languages_edit" v-for="lang in options_language" key="lang.code">
+          <span>{{ lang.name}}</span>
+          <button @click="delete_language(lang.id)">Удалить</button>
+        </div>
+        <div class="popup_panel_container__input">
+          <div class="mm popup_panel_container__title mc">Добавление языка</div>
+          <label for="name_section">code языка <span class="mc">ENG</span></label>
+          <input type="text" v-model="code_lang_add" placeholder="Введите код" aria-labelledby="name_section" id="name_section">
+        </div>
+        <div class="popup_panel_container__input">
+          <label for="title_section">Название языка</label>
+          <input type="text" v-model="name_lang_add" placeholder="Введите название" aria-labelledby="title_section" id="title_section">
+        </div>
+        <span ref="messageElement" class="message_add_lang" v-if="message_add_lang != null">{{message_add_lang}}</span>
+        <UIButton @click="addLanguage">Добавить язык</UIButton>
+      </div>
+    </UIPopup>
     <div class="container_nav_panel_content_admin">
     <div class="selects_lang_answer_and_task_admin">
      <div class="selects_lang_answer_and_task__block_admin special_index_z mr">
@@ -49,29 +72,6 @@
         </multiselect>
         <button class="button_search_content mr atsa_pt" @click="() => openPopup('is_visible_edit_languages')">{{ popup_state.edit_languages }}</button>
       </div>
-      <UIPopup   :show="popup_state.is_visible_edit_languages"
-                 :title_popup="popup_state.edit_languages"
-                 @close="() => closePopup('is_visible_edit_languages')"
-      >
-        <div class="popup_panel_container">
-          <div class="mm popup_panel_container__title">Удаление языка</div>
-          <div class="languages_edit" v-for="lang in options_language" key="lang.code">
-          <span>{{ lang.name}}</span>
-            <button @click="delete_language(lang.id)">Удалить</button>
-          </div>
-          <div class="popup_panel_container__input">
-            <div class="mm popup_panel_container__title mc">Добавление языка</div>
-            <label for="name_section">code языка <span class="mc">ENG</span></label>
-            <input type="text" v-model="code_lang_add" placeholder="Введите код" aria-labelledby="name_section" id="name_section">
-          </div>
-          <div class="popup_panel_container__input">
-            <label for="title_section">Название языка</label>
-            <input type="text" v-model="name_lang_add" placeholder="Введите название" aria-labelledby="title_section" id="title_section">
-          </div>
-          <span ref="messageElement" class="message_add_lang" v-if="message_add_lang != null">{{message_add_lang}}</span>
-          <UIButton @click="addLanguage">Добавить язык</UIButton>
-        </div>
-      </UIPopup>
     </div>
       <div class="theme_sections_admin_container">
       <div class="theme_sections_admin mr">
@@ -211,7 +211,6 @@
 <div class="container_tasks__theme_admin_container" v-for="item in tasks" :key="item.number_task">
      <div class="container_tasks__theme_admin" v-if="active_params_task.theme_active != null">
 <!--       <component :is="getComponent(item.type)" :item="item" @file-uploaded="updateContent" ></component>-->
-
        <div class="container_task_admin">
          <div class="container_task__status_admin">
            <h5 class="mr h5_titles">{{item.number_task}} Задание</h5>
@@ -219,24 +218,21 @@
          <div class="content_container_admin special_index_z">
          <div class="choice_content_task_panel_admin">
            <multiselect
-               class="choice_task_select_admin"
-               v-model="selectedOption_item_task"
-               :options="options_task_item"
-               :multiple="false"
-               :close-on-select="true"
-               :clear-on-select="false"
-               placeholder="Выберите язык"
-               :allow-empty="false"
-               label="name"
-               track-by="name"
-               :select-label="'Enter для выбора'"
-               :selected-label="'Выбрано'"
-               :deselect-label="'Нажмите, чтобы удалить'"
-               :no-options-label="'Нет элементов'"
-           > <template #noResult>Такого языка нету</template>
-           </multiselect>
+             class="choice_task_select_admin"
+             v-model="item.type"
+             :options="options_task_item"
+             placeholder="Выберите тип"
+             :select-label="'Enter для выбора'"
+             :selected-label="'Выбрано'"
+             :multiple="false"
+             :close-on-select="true"
+             :allow-empty="false"
+             :clear-on-select="false"
+         >
+           <template #noResult>Такого типа нету</template>
+         </multiselect>
            <div class="upload-btn-wrapper_admin mr">
-             <button class="btn mr" @click="triggerFileInput">Загрузить файл</button>
+<!--             <button class="btn mr" @click="triggerFileInput">Загрузить файл</button>-->
              <input type="file" ref="fileInput" class="upload_file" @change="handleFileUpload" />
              <!-- Отобразить имя файла, если оно есть -->
              <div v-if="fileName" class="file-name">{{ fileName }}</div>
@@ -249,13 +245,13 @@
       <div class="choice_content_task_panel_admin">
         <div class="task_description_title_admin">Описание</div>
       </div>
-         <textarea type="text" class="this_task_description_admin _for_description mr">{{item.description}}</textarea>
+         <textarea type="text" class="this_task_description_admin _for_description mr" v-model="item.description">{{item.description}}</textarea>
          </div>
          <div class="content_container_admin">
            <div class="choice_content_task_panel_admin">
            <div class="task_description_title">Правильный ответ</div>
          </div>
-         <textarea type="text" class="this_task_description_admin mr">{{item.true_answer}}</textarea>
+         <textarea type="text" class="this_task_description_admin mr" v-model="item.true_answer">{{item.true_answer}}</textarea>
            </div>
          <div class="content_container_admin">
            <div class="choice_content_task_panel_admin">
@@ -265,15 +261,15 @@
 <!--             <button class="answer_keywords_button del_keyword">{{ keyword }}</button>-->
 <!--           </li>-->
            <ul class="answer_keywords">
-             <li v-for="(keyword, index) in splitKeywords(item.true_keywords)" :key="index"> <button class="answer_keywords_button del_keyword"></button>{{ keyword }}</li>
+             <li v-for="(keyword, index) in splitKeywords(item.true_keywords)" :key="index"> <button class="answer_keywords_button del_keyword" @click="removeKeyword(item, keyword)"></button>{{ keyword }}</li>
            </ul>
            <div class="input_container">
-             <input type="text" class="search_content_admin mr" placeholder="Ключевое слово" aria-labelledby="theme_tasks">
-             <button class="answer_keywords_button add_keyword"></button>
+             <input type="text" class="search_content_admin mr" placeholder="Ключевое слово" v-model="item.tempKeyword" aria-labelledby="theme_tasks">
+             <button class="answer_keywords_button add_keyword" @click="addKeyword(item)"></button>
            </div>
          </div>
          <div class="buttons_admin_actions">
-           <button class="buttons_admin mc_bg">Сохранить изменения</button>
+           <button class="buttons_admin mc_bg" @click="saveData(item)">Сохранить изменения</button>
            <button class="buttons_admin mcr" @click="deleteThisTask(item.number_task)">Удалить задание</button>
          </div>
        </div>
@@ -287,6 +283,7 @@
 
 <script setup>
 import {ref, reactive,nextTick, watch, onMounted} from 'vue';
+import { fetchCsrfToken } from '~/utils/utils.js';
 // import { useFetch } from '#app';
 import Multiselect from "vue-multiselect";
 import Paginate from "@/components/Pagination.vue"
@@ -303,7 +300,7 @@ definePageMeta({
 //Загрузка контента в упражнениях
 const getComponent = (type) => {
   switch (type) {
-    case 'image':
+    case 'img':
       return ImageUploadComponent;
     case 'video':
       return VideoUploadComponent;
@@ -380,12 +377,7 @@ const active_params_task = reactive({
 // Метод для получения данных о темах
 const fetchThemes = async (page) => {
   try {
-    // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-
+    await fetchCsrfToken();
     // Определение параметров запроса
     const params = {
       page: page,
@@ -512,34 +504,6 @@ const selectedOption_answer = ref([]);
 const page = ref(10);
 
 //рендер Языков
-// Ссылка для хранения списка языков
-// const options_language = ref([]);
-
-// import { useFetch } from '#app';
-// import {getCookie} from "cookies-next";
-// // Получение CSRF токена
-// await $fetch(`http://localhost:8000/sanctum/csrf-cookie`,{
-//   method: 'GET',
-//   credentials: 'include',
-// });
-//
-// const Admin_token = decodeURIComponent(getCookie('XSRF-TOKEN'));
-// const authCookie = useCookie('auth_token');
-// const { data: options_language } = await $fetch('http://localhost:8000/api/all_languages', {
-//       method: 'GET',
-//       credentials: 'include',
-//       headers: {
-//         'X-XSRF-TOKEN': Admin_token,
-//         'Cookie': `auth_token=${authCookie.value}`,
-//         'Accept': 'application/json, text/plain, */*',
-//         'Content-Type': 'application/json',
-//         'X-Requested-With': 'XMLHttpRequest',
-//       },
-//     });
-
-// if (data.value && data.value.length > 0) {
-//   options_language.value = data.value;
-// }
 
 const fetchLanguages = async () => {
   try {
@@ -584,10 +548,7 @@ const addLanguage = async () => {
   }
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     // Определение параметров запроса
     const data = {
@@ -625,10 +586,7 @@ const addLanguage = async () => {
 const delete_language = async (id) => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     await axios.delete(`http://localhost:8000/api/language_delete/${id}`, {
       withCredentials: true,
@@ -672,10 +630,7 @@ onMounted(async () => {
 const delete_section = async (id) => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
     await axios.delete(`http://localhost:8000/api/section_delete/${id}`, {
       withCredentials: true,
       headers: {
@@ -723,10 +678,7 @@ const addSection = async () => {
   }
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     const data = {
         code: code_section_add.value,
@@ -781,10 +733,7 @@ const addTheme = async () => {
   }
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     // Определение параметров запроса
     const data_themes = {
@@ -825,10 +774,7 @@ const search_theme = ref(null);
 const search_this_theme = async () => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     // Определение параметров запроса
     const searchParams = {
@@ -881,14 +827,25 @@ const tasks = reactive([
 const splitKeywords = (keywords) => {
   return keywords ? keywords.split(',') : [];
 };
+const removeKeyword = (item, keywordToRemove) => {
+  item.true_keywords = item.true_keywords.split(',')
+      .filter(keyword => keyword.trim() !== keywordToRemove.trim())
+      .join(',');
+};
+const addKeyword = (item) => {
+  const trimmedKeyword = item.tempKeyword.trim();
+  if (trimmedKeyword) {
+    item.true_keywords = item.true_keywords
+        ? `${item.true_keywords},${trimmedKeyword}`
+        : trimmedKeyword;
+    item.tempKeyword = '';
+  }
+};
 //Получение заданий
 const fetchExercises = async () => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
     // Определение параметров запроса
     const searchParams = {
       id_lang_task: active_params_task.task_lang_active?.id,
@@ -910,8 +867,12 @@ const fetchExercises = async () => {
       }
     });
 
-    // Обновление реактивных переменных данными
-    tasks.splice(0, tasks.length, ...response.data.exercises.data);
+    const updatedTasks = response.data.exercises.data.map(task => {
+    return { ...task, tempKeyword: '' };
+  });
+
+// Обновление реактивных переменных данными
+  tasks.splice(0, tasks.length, ...updatedTasks);
     amount_task.value = response.data.count_size;
 
   } catch (error) {
@@ -927,10 +888,7 @@ const fetchExercises_more = async () => {
   if (newPage <= maxPages) {
     try {
       // Получение CSRF токена
-      await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+      await fetchCsrfToken();
 
       // Определение параметров запроса
       const searchParams = {
@@ -1037,10 +995,7 @@ function delete_task(){
 const deleteExercises = async () => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     // Отправка запроса на удаление заданий
     const response = await axios.post('http://localhost:8000/api/delete-exercises', {
@@ -1073,10 +1028,7 @@ const deleteExercises = async () => {
 const addExercise = async () => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
 
     // Отправка запроса на добавление задания
     const response = await axios.post('http://localhost:8000/api/add-exercise', {
@@ -1147,20 +1099,60 @@ const deleteThisTask = async (number) => {
     console.error('Ошибка при удалении заданий:', error);
   }
 };
-//Конец редактив темы
+//Сохранение измненеия задания по item
+const saveData = async (item) => {
+  try {
+    // Получение CSRF токена, если он ещё не был получен
+    await fetchCsrfToken();
+    const exerciseData = {
+      id: item.id,
+      id_lang_task: item.id_lang_task,
+      id_lang_answer: item.id_lang_answer,
+      id_section: item.id_section,
+      name: item.name,
+      number_task: item.number_task,
+      type: item.type,
+      content_name: item.content_name,
+      description: item.description,
+      true_answer: item.true_answer,
+      true_keywords: item.true_keywords
+    };
+    console.log(exerciseData);
+    // Отправка запроса на сохранение изменений в задании
+    const response = await axios.put('http://localhost:8000/api/update-exercise', exerciseData, {
+      withCredentials: true,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
+      }
+    });
+
+    // Здесь можно обработать ответ сервера, например, показать уведомление об успехе
+    console.log('Изменения сохранены:', response.data);
+
+  } catch (error) {
+    // Обработка возможных ошибок при отправке запроса
+    console.error('Ошибка при сохранении изменений:', error);
+  }
+};
+// Конец редактив темы
 
 function active_section(val){
  active_params_task.section_active = val;
 }
-const selectedOption_item_task = ref({ name: 'Картинка'});
+// const selectedOption_item_task = ref({ name: 'Картинка'});
 
-const options_task_item = [
-  { name: 'Картинка', type: 'img' },
-  { name: 'Видео', type: 'video' },
-  { name: 'Аудио', type: 'audio' },
-  { name: 'Текст', type: 'text' },
-  // ...добавьте другие языки
-];
+const options_task_item = ['img', 'video', 'audio', 'text',];
+
+// Добавьте вычисляемое свойство для каждого item в tasks
+// tasks.forEach(item => {
+//   item.selectedOption = computed(() => {
+//     return getOptionByType(item.type);
+//   });
+// });
+
 
 
 const title_button = ref('Панель Администратора');

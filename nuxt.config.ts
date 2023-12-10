@@ -4,12 +4,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/style.css'],
   devtools: { enabled: true },
   modules: ['@pinia/nuxt'],
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8000',
-      pathRewrite: { '^/api': '' }
-    }
-  },
   app: {
     head: {
       meta: [

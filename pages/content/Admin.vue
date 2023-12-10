@@ -22,6 +22,7 @@
 <script setup>
 import {ref} from 'vue'
 import { useRouter } from 'vue-router';
+import { fetchCsrfToken } from '~/utils/utils.js';
 // import axios from 'axios';
 import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
 const authStore = useAuthStore(); // Используем наше хранилище
@@ -53,20 +54,13 @@ async function login() {
 
   try {
     // Получение CSRF токена
-    await $fetch(`/api/sanctum/csrf-cookie`,{
-      method: 'GET',
-      credentials: 'include',
-    });
-
-    const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
-    console.log('CSRF token received:', token);
-
+    await fetchCsrfToken();
     // Отправка запроса на авторизацию
-    const response = await $fetch(`/api/login`, {
+    const response = await $fetch(`http://localhost:8000/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'X-XSRF-TOKEN': token,
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
@@ -80,7 +74,7 @@ async function login() {
       authStore.setAuthentication(true); // Устанавливаем аутентификацию в true
       // Установить состояние аутентификации при успешном входе
       localStorage.setItem('isAuthenticated', '1');
-      console.log("Аутентификация прошла успешно");
+      // console.log("Аутентификация прошла успешно");
     }
   } catch (error) {
     if (error.response) {
@@ -101,6 +95,5 @@ async function login() {
   }
 }
 </script>
-
 <style scoped>
 </style>

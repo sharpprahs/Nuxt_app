@@ -35,6 +35,18 @@ return [
             'root' => storage_path('app'),
             'throw' => false,
         ],
+        'nuxt_video' => [
+            'driver' => 'local',
+            'root' => '../../assets/tasks/video',
+        ],
+        'nuxt_img' => [
+            'driver' => 'local',
+            'root' => '../../assets/tasks/img',
+        ],
+        'nuxt_audio' => [
+            'driver' => 'local',
+            'root' => '../../assets/tasks/audio',
+        ],
 
         'public' => [
             'driver' => 'local',
