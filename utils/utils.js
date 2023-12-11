@@ -6,7 +6,7 @@ export async function fetchCsrfToken() {
 
     const baseUrl = getBaseUrl();
 
-    await $fetch(`${baseUrl}:8000/sanctum/csrf-cookie`, {
+    await $fetch(`${baseUrl}/sanctum/csrf-cookie`, {
         method: 'GET',
         credentials: 'include',
     });

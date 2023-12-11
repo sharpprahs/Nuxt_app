@@ -47,6 +47,8 @@ import {useCookies} from "vue3-cookies";
 import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
 import { getCookie } from 'cookies-next'; // Импорт функции для получения кук
 const authStore = useAuthStore(); // Используем наше хранилище
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+import {fetchCsrfToken} from "~/utils/utils.js";
 // const isAuthenticated = ref(false);
 
 const { cookies } = useCookies();
@@ -71,20 +73,16 @@ async function login_acc(){
 async function logout() {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`,{
-      method: 'GET',
-      credentials: 'include',
-    });
-
-    const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
-    // console.log('CSRF token received:', token);
+    await fetchCsrfToken();
+    // Отправка запроса на авторизацию
+    const baseUrl = getBaseUrl();
 
     // Отправляем запрос на выход из системы на сервер
-    const response = await fetch(`http://localhost:8000/api/logout`, {
+    const response = await fetch(`${baseUrl}/api/logout`, {
       method: 'POST',
       credentials: 'include', // Важно для кросс-доменных запросов
       headers: {
-        'X-XSRF-TOKEN': token,
+        'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
@@ -110,11 +108,7 @@ async function logout() {
     // Перенаправление пользователя на главную страницу
     router.push('/content/admin');
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`,{
-      method: 'GET',
-      credentials: 'include',
-    });
-
+    await fetchCsrfToken();
   } catch (error) {
     console.error('Ошибка при выходе:', error);
   }

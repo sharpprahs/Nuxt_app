@@ -10,9 +10,11 @@
 </template>
 
 <script setup>
-import {compile, ref} from 'vue';
+import {ref} from 'vue';
 import axios from 'axios';
 import {getCookie} from "cookies-next";
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+import {fetchCsrfToken} from "~/utils/utils.js";
 const selectedFileName = ref(null);
 // data: content_name,type
 const props = defineProps({
@@ -39,12 +41,11 @@ const handleFileUpload = async (event) => {
 
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
+    // Отправка запроса на авторизацию
+    const baseUrl = getBaseUrl();
 
-    const response = await axios.post('http://localhost:8000/api/upload-video', formData, {
+    const response = await axios.post(`${baseUrl}/api/upload-video`, formData, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),

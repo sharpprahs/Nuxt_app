@@ -13,6 +13,8 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import {getCookie} from "cookies-next";
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+import {fetchCsrfToken} from "~/utils/utils.js";
 
 const selectedFileName = ref('Выберите изображение');
 const props = defineProps({
@@ -35,12 +37,12 @@ const handleImageUpload = async (event) => {
   formData.append('image', file);
 
   try {
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    // Получение CSRF токена
+    await fetchCsrfToken();
+    // Отправка запроса на авторизацию
+    const baseUrl = getBaseUrl();
 
-    const response = await axios.post('http://localhost:8000/api/upload-image', formData, {
+    const response = await axios.post(`${baseUrl}/api/upload-image`, formData, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),

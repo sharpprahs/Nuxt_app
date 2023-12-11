@@ -391,7 +391,7 @@ const fetchThemes = async (page) => {
     const baseUrl = getBaseUrl();
 
     // Отправка GET запроса с использованием axios
-    const response = await axios.get(`${baseUrl}:8000/api/exercises`, {
+    const response = await axios.get(`${baseUrl}/api/exercises`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -509,7 +509,7 @@ const fetchLanguages = async () => {
   try {
     const baseUrl = getBaseUrl();
     // Отправляем запрос и сразу возвращаем ответ
-    return await $fetch(`${baseUrl}:8000/api/all_languages`, {
+    return await $fetch(`${baseUrl}/api/all_languages`, {
       method: 'GET',
       credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
@@ -590,7 +590,7 @@ const delete_language = async (id) => {
     await fetchCsrfToken();
     const baseUrl = getBaseUrl();
 
-    await axios.delete(`${baseUrl}:8000/api/language_delete/${id}`, {
+    await axios.delete(`${baseUrl}/api/language_delete/${id}`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -613,7 +613,7 @@ const fetchSections = async () => {
   try {
     const baseUrl = getBaseUrl();
     // Отправляем запрос и сразу возвращаем ответ
-    return await $fetch(`${baseUrl}:8000/api/all_sections`, {
+    return await $fetch(`${baseUrl}/api/all_sections`, {
       method: 'GET',
       credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
@@ -635,7 +635,7 @@ const delete_section = async (id) => {
     // Получение CSRF токена
     await fetchCsrfToken();
     const baseUrl = getBaseUrl();
-    await axios.delete(`${baseUrl}:8000/api/section_delete/${id}`, {
+    await axios.delete(`${baseUrl}/api/section_delete/${id}`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -690,7 +690,7 @@ const addSection = async () => {
         // Дополнительные параметры фильтрации могут быть добавлены здесь
       };
     const baseUrl = getBaseUrl();
-    const response = await axios.post(`${baseUrl}:8000/api/section_add`,data, {
+    const response = await axios.post(`${baseUrl}/api/section_add`,data, {
       withCredentials: true,
         headers: {
           'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -749,7 +749,7 @@ const addTheme = async () => {
     };
     const baseUrl = getBaseUrl();
     // Отправка GET запроса с использованием axios
-    const response = await axios.post(`${baseUrl}:8000/api/exercises_create`,data_themes, {
+    const response = await axios.post(`${baseUrl}/api/exercises_create`,data_themes, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -791,7 +791,7 @@ const search_this_theme = async () => {
     // Отправка GET запроса с использованием axios
     const baseUrl = getBaseUrl();
 
-    const response = await axios.get(`${baseUrl}:8000/api/exercises_check_theme`, {
+    const response = await axios.get(`${baseUrl}/api/exercises_check_theme`, {
       params: searchParams,
       withCredentials: true,
       headers: {
@@ -864,7 +864,7 @@ const fetchExercises = async () => {
     // Отправка запроса на получение заданий
     const baseUrl = getBaseUrl();
 
-    const response = await axios.get(`${baseUrl}:8000/api/get-exercises`, {
+    const response = await axios.get(`${baseUrl}/api/get-exercises`, {
       params: searchParams,
       withCredentials: true,
       headers: {
@@ -914,7 +914,7 @@ const fetchExercises_more = async () => {
       // Отправка запроса на получение заданий
       const baseUrl = getBaseUrl();
 
-      const response = await axios.get(`${baseUrl}:8000/api/get-exercises`, {
+      const response = await axios.get(`${baseUrl}/api/get-exercises`, {
         params: searchParams,
         withCredentials: true,
         headers: {
@@ -1014,7 +1014,7 @@ const deleteExercises = async () => {
     // Отправка запроса на удаление заданий
     const baseUrl = getBaseUrl();
 
-    const response = await axios.post(`${baseUrl}:8000/api/delete-exercises`, {
+    const response = await axios.post(`${baseUrl}/api/delete-exercises`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1049,7 +1049,7 @@ const addExercise = async () => {
     // Отправка запроса на добавление задания
     const baseUrl = getBaseUrl();
 
-    const response = await axios.post(`${baseUrl}:8000/api/add-exercise`, {
+    const response = await axios.post(`${baseUrl}/api/add-exercise`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1085,7 +1085,7 @@ const deleteThisTask = async (number) => {
     // Отправка запроса на удаление заданий
     const baseUrl = getBaseUrl();
 
-    const response = await axios.post(`${baseUrl}:8000/api/delete-task-exercise`, {
+    const response = await axios.post(`${baseUrl}/api/delete-task-exercise`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1139,7 +1139,7 @@ const saveData = async (item) => {
     // Отправка запроса на сохранение изменений в задании
     const baseUrl = getBaseUrl();
 
-    const response = await axios.put(`${baseUrl}:8000/api/update-exercise`, exerciseData, {
+    const response = await axios.put(`${baseUrl}/api/update-exercise`, exerciseData, {
       withCredentials: true,
       headers: {
         'Accept': 'application/json',

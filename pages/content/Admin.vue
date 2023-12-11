@@ -60,7 +60,7 @@ async function login() {
     // Отправка запроса на авторизацию
     const baseUrl = getBaseUrl();
 
-    const response = await $fetch(`${baseUrl}:8000/api/login`, {
+    const response = await $fetch(`${baseUrl}/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {

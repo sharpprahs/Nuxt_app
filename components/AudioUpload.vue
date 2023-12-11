@@ -13,7 +13,8 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import {getCookie} from "cookies-next";
-
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+import {fetchCsrfToken} from "~/utils/utils.js";
 const selectedFileName = ref('Выберите аудио');
 const props = defineProps({
   item: Object
@@ -36,12 +37,12 @@ const handleAudioUpload = async (event) => {
   formData.append('audio', file);
 
   try {
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    // Получение CSRF токена
+    await fetchCsrfToken();
+    // Отправка запроса на авторизацию
+    const baseUrl = getBaseUrl();
 
-    const response = await axios.post('http://localhost:8000/api/upload-audio', formData, {
+    const response = await axios.post(`${baseUrl}/api/upload-audio`, formData, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
