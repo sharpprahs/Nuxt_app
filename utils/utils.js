@@ -1,6 +1,12 @@
 // utils.js
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+
 export async function fetchCsrfToken() {
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
+
+
+    const baseUrl = getBaseUrl();
+
+    await $fetch(`${baseUrl}:8000/sanctum/csrf-cookie`, {
         method: 'GET',
         credentials: 'include',
     });

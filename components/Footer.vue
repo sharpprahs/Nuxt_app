@@ -77,7 +77,7 @@ async function logout() {
     });
 
     const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
-    console.log('CSRF token received:', token);
+    // console.log('CSRF token received:', token);
 
     // Отправляем запрос на выход из системы на сервер
     const response = await fetch(`http://localhost:8000/api/logout`, {

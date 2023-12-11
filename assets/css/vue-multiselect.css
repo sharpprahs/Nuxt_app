@@ -65,7 +65,10 @@ fieldset[disabled] .multiselect {
     width: 100%;
     min-height: 40px;
     text-align: left;
-    color: #35495e;
+    color: var(--main_multiselect_text);
+}
+._rss.multiselect {
+    color: var(--main_multiselect_selected_r);
 }
 
 .multiselect * {
@@ -287,7 +290,7 @@ fieldset[disabled] .multiselect {
 .multiselect__content-wrapper {
     position: absolute;
     display: block;
-    background: #fff;
+    background: var(--main_multiselect_selected_back);
     top:100%;
     left: 0;
     width: 100%;

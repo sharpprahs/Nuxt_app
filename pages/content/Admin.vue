@@ -28,6 +28,8 @@ import { useAuthStore } from "~/store/auth"; // Импортируем наше 
 const authStore = useAuthStore(); // Используем наше хранилище
 // import { useRuntimeConfig } from '#imports'; // Импортирует конфигурацию Nuxt
 import { getCookie } from 'cookies-next'; // Импорт функции для получения кук
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+
 
 const loginData = ref({
   name: '',
@@ -56,7 +58,9 @@ async function login() {
     // Получение CSRF токена
     await fetchCsrfToken();
     // Отправка запроса на авторизацию
-    const response = await $fetch(`http://localhost:8000/api/login`, {
+    const baseUrl = getBaseUrl();
+
+    const response = await $fetch(`${baseUrl}:8000/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {

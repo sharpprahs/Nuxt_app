@@ -1,17 +1,19 @@
 // composables/fetchLanguages.js
 import {getCookie} from "cookies-next";
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
 
 export const fetchLanguages = async () => {
     try {
+        const baseUrl = getBaseUrl();
         // Получение CSRF токена
-        await $fetch(`http://localhost:8000/sanctum/csrf-cookie`,{
+        await $fetch(`${baseUrl}:8000/sanctum/csrf-cookie`,{
             method: 'GET',
             credentials: 'include',
         });
 
         const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
         // Отправка запроса на авторизацию
-        const response = await $fetch(`http://localhost:8000/api/all_languages`, {
+        const response = await $fetch(`${baseUrl}:8000/api/all_languages`, {
             method: 'GET',
             credentials: 'include',
             headers: {

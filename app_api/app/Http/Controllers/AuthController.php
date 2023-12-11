@@ -35,7 +35,7 @@ class AuthController extends Controller
             [$id, $token] = explode('|', $token, 2);
 
             // Установка HttpOnly куки с токеном
-            $cookie = cookie('auth_token', $token, 60); // Установка куки на 60 минут
+            $cookie = cookie('auth_token', $token, 525600); // Установка куки на 60 минут
 
             // Возвращаем ответ с установленной кукой
             return response()->json([

@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   pages: true,
-  css: ['~/assets/css/style.css'],
+  css: ['~/assets/css/style_v2.css'],
   devtools: { enabled: true },
   modules: ['@pinia/nuxt'],
   app: {

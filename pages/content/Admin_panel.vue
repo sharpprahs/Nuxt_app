@@ -208,8 +208,8 @@
   </div>
 
 </div>
-<div class="container_tasks__theme_admin_container" v-for="item in tasks" :key="item.number_task">
-     <div class="container_tasks__theme_admin" v-if="active_params_task.theme_active != null">
+<div class="container_tasks__theme_admin_container" v-for="item in tasks" :key="item.number_task" v-if="active_params_task.theme_active != null">
+     <div class="container_tasks__theme_admin" >
 <!--       <component :is="getComponent(item.type)" :item="item" @file-uploaded="updateContent" ></component>-->
        <div class="container_task_admin">
          <div class="container_task__status_admin">
@@ -268,6 +268,7 @@
              <button class="answer_keywords_button add_keyword" @click="addKeyword(item)"></button>
            </div>
          </div>
+         <div class="info_message" v-if="item.alert_message != null">{{item.alert_message}}</div>
          <div class="buttons_admin_actions">
            <button class="buttons_admin mc_bg" @click="saveData(item)">Сохранить изменения</button>
            <button class="buttons_admin mcr" @click="deleteThisTask(item.number_task)">Удалить задание</button>
@@ -284,7 +285,6 @@
 <script setup>
 import {ref, reactive,nextTick, watch, onMounted} from 'vue';
 import { fetchCsrfToken } from '~/utils/utils.js';
-// import { useFetch } from '#app';
 import Multiselect from "vue-multiselect";
 import Paginate from "@/components/Pagination.vue"
 import axios from "axios";
@@ -294,6 +294,8 @@ import {getCookie} from "cookies-next";
 import ImageUploadComponent from '@/components/ImageUpload.vue';
 import VideoUploadComponent from '@/components/VideoUpload.vue';
 import AudioUploadComponent from '@/components/AudioUpload.vue';
+import { getBaseUrl } from "~/utils/getBaseUrl.js"
+
 definePageMeta({
   middleware: 'auth'
 });
@@ -327,7 +329,7 @@ let popup_state = reactive({
 });
 
 function closePopup(propKey) {
-  console.log(propKey);
+  // console.log(propKey);
   if (popup_state[propKey] !== undefined) {
     popup_state[propKey] = false;
     document.body.style.overflow = "auto";
@@ -386,9 +388,10 @@ const fetchThemes = async (page) => {
       id_section: active_params_task.section_active,
       // Дополнительные параметры фильтрации могут быть добавлены здесь
     };
+    const baseUrl = getBaseUrl();
 
     // Отправка GET запроса с использованием axios
-    const response = await axios.get('http://localhost:8000/api/exercises', {
+    const response = await axios.get(`${baseUrl}:8000/api/exercises`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -430,7 +433,9 @@ function startNewText() {
   clearTimeout(typingTimeout);
   charIndex = 0;
   isTyping = true;
-  textElement.value.textContent = '';
+  if(textElement.value) {
+    textElement.value.textContent = '';
+  }
   typeAndEraseText();
 }
 
@@ -485,11 +490,6 @@ onMounted(() => {
   startNewText();
 
 });
-// const allItems = ref([]); // массив элементов
-
-// const paginatedItems = computed(() => {
-//   // код для определения элементов текущей страницы
-// });
 
 // Функция обновления текущей страницы
 const setCurrentPage = (newPage) => {
@@ -507,8 +507,9 @@ const page = ref(10);
 
 const fetchLanguages = async () => {
   try {
+    const baseUrl = getBaseUrl();
     // Отправляем запрос и сразу возвращаем ответ
-    return await $fetch('http://localhost:8000/api/all_languages', {
+    return await $fetch(`${baseUrl}:8000/api/all_languages`, {
       method: 'GET',
       credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
@@ -556,9 +557,9 @@ const addLanguage = async () => {
       name: name_lang_add.value
       // Дополнительные параметры фильтрации могут быть добавлены здесь
     };
-
+    const baseUrl = getBaseUrl();
     // Отправка GET запроса с использованием axios
-    const response = await axios.post('http://localhost:8000/api/languages_add',data, {
+    const response = await axios.post(`${baseUrl}/api/languages_add`,data, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -587,8 +588,9 @@ const delete_language = async (id) => {
   try {
     // Получение CSRF токена
     await fetchCsrfToken();
+    const baseUrl = getBaseUrl();
 
-    await axios.delete(`http://localhost:8000/api/language_delete/${id}`, {
+    await axios.delete(`${baseUrl}:8000/api/language_delete/${id}`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -609,8 +611,9 @@ const delete_language = async (id) => {
 //Рендер Секций(разделов)
 const fetchSections = async () => {
   try {
+    const baseUrl = getBaseUrl();
     // Отправляем запрос и сразу возвращаем ответ
-    return await $fetch('http://localhost:8000/api/all_sections', {
+    return await $fetch(`${baseUrl}:8000/api/all_sections`, {
       method: 'GET',
       credentials: 'include', // Включаем credentials для кросс-доменных запросов
     });
@@ -631,7 +634,8 @@ const delete_section = async (id) => {
   try {
     // Получение CSRF токена
     await fetchCsrfToken();
-    await axios.delete(`http://localhost:8000/api/section_delete/${id}`, {
+    const baseUrl = getBaseUrl();
+    await axios.delete(`${baseUrl}:8000/api/section_delete/${id}`, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -685,8 +689,8 @@ const addSection = async () => {
         name: name_section_add.value
         // Дополнительные параметры фильтрации могут быть добавлены здесь
       };
-
-    const response = await axios.post('http://localhost:8000/api/section_add',data, {
+    const baseUrl = getBaseUrl();
+    const response = await axios.post(`${baseUrl}:8000/api/section_add`,data, {
       withCredentials: true,
         headers: {
           'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -743,9 +747,9 @@ const addTheme = async () => {
       name: theme_add_name.value,
       // Дополнительные параметры фильтрации могут быть добавлены здесь
     };
-
+    const baseUrl = getBaseUrl();
     // Отправка GET запроса с использованием axios
-    const response = await axios.post('http://localhost:8000/api/exercises_create',data_themes, {
+    const response = await axios.post(`${baseUrl}:8000/api/exercises_create`,data_themes, {
       withCredentials: true,
       headers: {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
@@ -785,7 +789,9 @@ const search_this_theme = async () => {
     };
 
     // Отправка GET запроса с использованием axios
-    const response = await axios.get('http://localhost:8000/api/exercises_check_theme', {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.get(`${baseUrl}:8000/api/exercises_check_theme`, {
       params: searchParams,
       withCredentials: true,
       headers: {
@@ -856,7 +862,9 @@ const fetchExercises = async () => {
     };
 
     // Отправка запроса на получение заданий
-    const response = await axios.get(`http://localhost:8000/api/get-exercises`, {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.get(`${baseUrl}:8000/api/get-exercises`, {
       params: searchParams,
       withCredentials: true,
       headers: {
@@ -868,7 +876,11 @@ const fetchExercises = async () => {
     });
 
     const updatedTasks = response.data.exercises.data.map(task => {
-    return { ...task, tempKeyword: '' };
+      return {
+        ...task,
+        tempKeyword: '',
+        alert_message: ''
+      };
   });
 
 // Обновление реактивных переменных данными
@@ -900,7 +912,9 @@ const fetchExercises_more = async () => {
       };
 
       // Отправка запроса на получение заданий
-      const response = await axios.get(`http://localhost:8000/api/get-exercises`, {
+      const baseUrl = getBaseUrl();
+
+      const response = await axios.get(`${baseUrl}:8000/api/get-exercises`, {
         params: searchParams,
         withCredentials: true,
         headers: {
@@ -998,7 +1012,9 @@ const deleteExercises = async () => {
     await fetchCsrfToken();
 
     // Отправка запроса на удаление заданий
-    const response = await axios.post('http://localhost:8000/api/delete-exercises', {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.post(`${baseUrl}:8000/api/delete-exercises`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1031,7 +1047,9 @@ const addExercise = async () => {
     await fetchCsrfToken();
 
     // Отправка запроса на добавление задания
-    const response = await axios.post('http://localhost:8000/api/add-exercise', {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.post(`${baseUrl}:8000/api/add-exercise`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1061,13 +1079,13 @@ const addExercise = async () => {
 const deleteThisTask = async (number) => {
   try {
     // Получение CSRF токена
-    await $fetch(`http://localhost:8000/sanctum/csrf-cookie`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+    await fetchCsrfToken();
+
 
     // Отправка запроса на удаление заданий
-    const response = await axios.post('http://localhost:8000/api/delete-task-exercise', {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.post(`${baseUrl}:8000/api/delete-task-exercise`, {
       id_lang_task: active_params_task.task_lang_active?.id,
       id_lang_answer: active_params_task.answer_lang_active?.id,
       id_section: active_params_task.section_active?.id,
@@ -1117,9 +1135,11 @@ const saveData = async (item) => {
       true_answer: item.true_answer,
       true_keywords: item.true_keywords
     };
-    console.log(exerciseData);
+    // console.log(exerciseData);
     // Отправка запроса на сохранение изменений в задании
-    const response = await axios.put('http://localhost:8000/api/update-exercise', exerciseData, {
+    const baseUrl = getBaseUrl();
+
+    const response = await axios.put(`${baseUrl}:8000/api/update-exercise`, exerciseData, {
       withCredentials: true,
       headers: {
         'Accept': 'application/json',
@@ -1128,7 +1148,10 @@ const saveData = async (item) => {
         'X-XSRF-TOKEN': decodeURIComponent(getCookie('XSRF-TOKEN')),
       }
     });
-
+    item.alert_message="Сохранения изменены";
+    setTimeout(() => {
+      item.alert_message = '';
+    }, 3000);
     // Здесь можно обработать ответ сервера, например, показать уведомление об успехе
     console.log('Изменения сохранены:', response.data);
 
