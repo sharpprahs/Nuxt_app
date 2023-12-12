@@ -23,10 +23,8 @@
 import {ref} from 'vue'
 import { useRouter } from 'vue-router';
 import { fetchCsrfToken } from '~/utils/utils.js';
-// import axios from 'axios';
 import { useAuthStore } from "~/store/auth"; // Импортируем наше хранилище
 const authStore = useAuthStore(); // Используем наше хранилище
-// import { useRuntimeConfig } from '#imports'; // Импортирует конфигурацию Nuxt
 import { getCookie } from 'cookies-next'; // Импорт функции для получения кук
 import { getBaseUrl } from "~/utils/getBaseUrl.js"
 
