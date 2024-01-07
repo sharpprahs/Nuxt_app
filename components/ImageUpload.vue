@@ -2,10 +2,11 @@
   <div class="container_component">
     <label class="input-file">
       <input type="file" @change="handleImageUpload" accept="image/png, image/jpeg, image/webp" name="image" hidden>
-      <span class="input-file-btn">Загрузить изображение</span>
+      <span class="input-file-btn">Загрузить <span class="format mm">png, webp, jpg</span></span>
       <span class="input-file-text">{{ selectedFileName }}</span>
     </label>
-    <img :src="imgUrl" alt="Загруженное изображение">
+    <img :src="`${baseUrl}/tasks/img/${props.item.content_name}`
+" alt="Загруженное изображение">
   </div>
 </template>
 
@@ -20,10 +21,11 @@ const selectedFileName = ref('Выберите изображение');
 const props = defineProps({
   item: Object
 });
+const baseUrl= ref(getBaseUrl())
 
-const imgUrl = computed(() => {
-  return new URL(`/assets/tasks/img/${props.item.content_name}`, import.meta.url).href;
-});
+// const imgUrl = computed(() => {
+//   return new URL(`/assets/tasks/img/${props.item.content_name}`, import.meta.url).href;
+// });
 
 const handleImageUpload = async (event) => {
   const file = event.target.files[0];
@@ -50,10 +52,14 @@ const handleImageUpload = async (event) => {
       }
     });
 
-    props.item.content_name = response.data.path;
+    props.item.content_name = response.data.filename;
   } catch (error) {
-    console.error('Ошибка при загрузке изображения:', error);
-    selectedFileName.value = 'Ошибка загрузки';
+    if (error.response.status === 422){
+      selectedFileName.value = 'Для загрузки нужен jpg,webp,png';
+    }
+    if (error.response.status === 419){
+      selectedFileName.value = 'Слишком большой размер файла';
+    }
   }
 };
 </script>

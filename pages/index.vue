@@ -9,7 +9,7 @@
     <NuxtLink to="/content/Exercises" class="link_to_tasks mm">ПЕРЕЙТИ К ЗАДАНИЯМ</NuxtLink>
   </div>
 </div>
-  <img class="preview_img" src="../assets/images/webp/preview_img.webp" alt="Linvisitics - изучай языки с нами"/>
+  <img class="preview_img" src="../assets/images/webp/girl_lv_main.webp" alt="Linvisitics - изучай языки с нами"/>
 </main>
   <div class="main_functions_container mr">
 <h2 class="main_functions_title mr"><span class="msb">Linvistics</span> предоставляет вам</h2>
@@ -17,24 +17,25 @@
 
 <div class="main_function mr">
   <div class="main_function__logo msb">Linvistics</div>
-  <div class="main_function__img interactive_img">
-    <img src="../assets/images/webp/comparison_with_correct_pronunciation.webp" alt="Сравнение с правильным произношением"/>
+  <div class="container_main_think">
+    <img class="img_description_main" src="../assets/images/webp/Comparison_with_correct_pronunciation.webp" alt="Интерактивные задания по произношению"/>
   </div>
   <h3 class="mr">Сравнение с правильным произношением</h3>
 </div>
 
       <div class="main_function mr">
         <div class="main_function__logo msb">Linvistics</div>
-        <div class="main_function__img choice_lang_img">
-          <img src="../assets/images/webp/other_language.webp" alt="Изучение произношения в разных языках" class="choice_lang_answer_and_question"/>
+        <div class="container_main_think">
+          <img class="img_description_main" src="../assets/images/webp/Learning_pronunciation_in_different_languages.webp" alt="Интерактивные задания по произношению"/>
         </div>
         <h3 class="mr">Изучение произношения в разных языках</h3>
       </div>
 
       <div class="main_function mr">
         <div class="main_function__logo msb">Linvistics</div>
-        <div class="main_function__img pron_com_img">
-          <img src="../assets/images/webp/pronunciation_comparison.webp" alt="Интерактивные задания по произношению"/>
+        <div class="container_main_think">
+          <img class="img_description_main" src="../assets/images/webp/Interactive_pronunciation_exercises.webp" alt="Интерактивные задания по произношению"/>
+
         </div>
         <h3 class="mr">Интерактивные задания по произношению</h3>
       </div>

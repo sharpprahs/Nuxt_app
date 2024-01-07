@@ -24,17 +24,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     // Защищенные маршруты
-    Route::get('/all_languages', [LanguageController::class, 'index']);
     Route::delete('/language_delete/{id}', [LanguageController::class, 'destroy']);
     Route::post('/languages_add', [LanguageController::class, 'store']);
-    Route::get('/all_sections', [SectionController::class, 'index']);
     Route::delete('/section_delete/{id}', [SectionController::class, 'destroy']);
     Route::post('/section_add', [SectionController::class, 'store']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/exercises', [ExerciseController::class, 'getThemes']);
     Route::post('/exercises_create', [ExerciseController::class, 'create']);
     Route::get('/exercises_check_theme', [ExerciseController::class, 'checkIfThemeExists']);
-    Route::get('/get-exercises', [ExerciseController::class, 'getExercises']);
     Route::post('/add-exercise', [ExerciseController::class, 'addExercise']);
     Route::post('/delete-exercises', [ExerciseController::class, 'deleteExercises']);
     Route::post('/delete-task-exercise', [ExerciseController::class, 'deleteTaskExercise']);
@@ -44,6 +40,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/update-exercise', [ExerciseController::class, 'updateExercise']);
 
 });
+Route::get('/get-exercises', [ExerciseController::class, 'getExercises']);
+Route::get('/exercises', [ExerciseController::class, 'getThemes']);
+Route::get('/all_languages', [LanguageController::class, 'index']);
+Route::get('/all_sections', [SectionController::class, 'index']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 

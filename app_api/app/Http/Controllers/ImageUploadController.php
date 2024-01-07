@@ -13,9 +13,11 @@ class ImageUploadController extends Controller
         ]);
 
         $file = $request->file('image');
-        $path = $file->store('', 'nuxt_img'); // Сохранение файла в локальном диске 'nuxt_images'
-        $fileName = basename($path); // Получение только имени файла
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $destinationPath = 'tasks/img';
+        $file->move(public_path($destinationPath), $fileName);
 
-        return response()->json(['path' => $fileName]);
+        // Возврат JSON-ответа только с именем файла
+        return response()->json(['filename' => $fileName]);
     }
 }

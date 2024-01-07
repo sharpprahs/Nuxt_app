@@ -1,7 +1,7 @@
 <template>
 <footer>
 <div class="footer_container mr">
-  <NuxtLink to="/" class="home_page mm"><span class="mcfb">LIN</span><span class="mc">VISITICS</span><br>Речевой тренажёр</NuxtLink>
+  <NuxtLink to="/" class="home_page"><span class="lin">LIN</span><span class="vistics">VISITICS</span><br>Речевой тренажёр</NuxtLink>
   <div class="footer_information">
     <div class="copyright_container">
       <div class="copyright_title mm">
@@ -33,7 +33,7 @@
     </div>
 </div>
   <div class="gmail_container">
-    <a class="mm" href="mailto:lingvistics@gmail.com">Linvisticsail@gmail.com</a>
+    <a class="mm" href="mailto:linvistics@gmail.com">linvistics@gmail.com</a>
   </div>
 </footer>
 </template>

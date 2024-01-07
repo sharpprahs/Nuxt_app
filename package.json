@@ -11,16 +11,17 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.8.0",
+    "nuxt": "^3.9.1",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.8.2",
+    "@nuxt/kit": "^3.9.1",
     "@pinia/nuxt": "^0.5.1",
     "axios": "^1.6.0",
+    "cookie-universal-nuxt": "^2.2.2",
     "cookies-next": "^4.1.0",
-    "h3": "^1.9.0",
+    "h3": "^1.10.0",
     "node-fetch": "^3.3.2",
     "pinia": "^2.1.7",
     "vue-multiselect": "^3.0.0-beta.3",

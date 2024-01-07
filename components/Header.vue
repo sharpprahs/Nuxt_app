@@ -4,7 +4,7 @@ id="Header"
 class="header_menu_navigation_pc_container"
 >
   <div class="header_menu_navigation_pc">
-    <NuxtLink to="/" class="home_page"><span class="mcfb">LIN</span><span class="mc">VISITICS</span><br>Речевой тренажёр</NuxtLink>
+    <NuxtLink to="/" class="home_page"><span class="lin_header">LIN</span><span class="vistics_header">VISITICS</span><br>Речевой тренажёр</NuxtLink>
     <ul class="header_choice_page mr">
 <li>
   <NuxtLink to="/content/Exercises" :class="{ 'active_page': $route.path === '/content/Exercises' }">
@@ -12,7 +12,7 @@ class="header_menu_navigation_pc_container"
   </NuxtLink>
 </li>
       <li>
-        <NuxtLink @click="showMobileMenu = false">
+        <NuxtLink to="/content/About" :class="{ 'active_page': $route.path === '/content/About' }">
           О проекте
         </NuxtLink>
       </li>
@@ -25,7 +25,7 @@ class="header_menu_navigation_pc_container"
         </ul>
       </li>
       <li>
-        <a class="switch_mode_dl msb">Dark</a>
+        <a class="switch_mode_dl msb" @click="toggleTheme">sad</a>
       </li>
     </ul>
 
@@ -40,7 +40,7 @@ class="header_menu_navigation_pc_container"
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink @click="showMobileMenu = false">
+        <NuxtLink to="/content/About" :class="{ 'active_page': $route.path === '/content/About' }">
           О проекте
         </NuxtLink>
       </li>
@@ -53,7 +53,7 @@ class="header_menu_navigation_pc_container"
         </ul>
       </li>
       <li>
-        <a class="switch_mode_dl msb">Dark</a>
+        <a class="switch_mode_dl msb" @click="toggleTheme">Swap</a>
       </li>
     </ul>
   </nav>
@@ -62,7 +62,13 @@ class="header_menu_navigation_pc_container"
 
 <script setup>
 import { ref,watch  } from 'vue';
-
+// import { useTheme } from '~/composables/useTheme';
+// import { useTheme } from '~/composables/useTheme'
+// import { computed } from 'vue'
+//
+// const { theme, toggleTheme } = useTheme()
+//
+// const themeText = computed(() => theme.value === 'light' ? 'Тёмная тема' : 'Светлая тема')
 // Reactive variable for tracking the visibility of the mobile menu
 const showMobileMenu = ref(false);
 

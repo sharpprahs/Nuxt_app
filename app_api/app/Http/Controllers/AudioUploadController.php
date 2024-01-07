@@ -13,9 +13,11 @@ class AudioUploadController extends Controller
         ]);
 
         $file = $request->file('audio');
-        $path = $file->store('', 'nuxt_audio'); // Сохранение файла в локальном диске 'nuxt_audio'
-        $fileName = basename($path); // Получение только имени файла
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $destinationPath = 'tasks/audio';
+        $file->move(public_path($destinationPath), $fileName);
 
-        return response()->json(['path' => $fileName]);
+        // Возврат JSON-ответа только с именем файла
+        return response()->json(['filename' => $fileName]);
     }
 }

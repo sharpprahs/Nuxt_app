@@ -14,9 +14,11 @@ class VideoUploadController extends Controller
         ]);
 
         $file = $request->file('video');
-        $path = $file->store('', 'nuxt_video'); // Сохраняет файл в локальном диске 'nuxt_video'
-        $fileName = basename($path); // Получаем только имя файла
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $destinationPath = 'tasks/video';
+        $file->move(public_path($destinationPath), $fileName);
 
-        return response()->json(['path' => $fileName]);
+        // Возврат JSON-ответа только с именем файла
+        return response()->json(['filename' => $fileName]);
     }
 }

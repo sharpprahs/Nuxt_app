@@ -2,10 +2,10 @@
   <div class="container_component">
     <label class="input-file">
       <input type="file" @change="handleFileUpload" accept="video/*" name="file" hidden>
-      <span class="input-file-btn">Загрузить файл</span>
+      <span class="input-file-btn">Загрузить <span class="format mm">mp4</span></span>
       <span class="input-file-text">{{ selectedFileName }}</span>
     </label>
-    <video :src="videoUrl" controls></video>
+    <video :src="`${baseUrl}/tasks/video/${props.item.content_name}`" controls></video>
   </div>
 </template>
 
@@ -24,10 +24,10 @@ const props = defineProps({
 //   return `${window.location.origin}/_nuxt/assets/tasks/video/${props.item.content_name}`;
 // });
 // Correctly import all images in the directory
-const videoUrl = computed(() => {
-  return new URL(`/assets/tasks/video/${props.item.content_name}`, import.meta.url).href;
-});
-
+// const videoUrl = computed(() => {
+//   return new URL(`/assets/tasks/video/${props.item.content_name}`, import.meta.url).href;
+// });
+const baseUrl= ref(getBaseUrl())
 const handleFileUpload = async (event) => {
   const file = event.target.files[0];
   if (!file) {
@@ -54,10 +54,14 @@ const handleFileUpload = async (event) => {
     });
 
     // Обновите содержимое задания видео URL после загрузки файла
-    props.item.content_name = response.data.path;
+    props.item.content_name = response.data.filename;
   } catch (error) {
-    console.error('Ошибка при загрузке видео:', error);
-    selectedFileName.value = 'Ошибка загрузки'; // Можно обновить текст, если произошла ошибка
+    if (error.response.status === 422){
+      selectedFileName.value = 'Для загрузки нужен mp4';
+    }
+    if (error.response.status === 419){
+      selectedFileName.value = 'Слишком большой размер файла';
+    }
   }
 };
 </script>

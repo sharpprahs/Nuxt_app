@@ -6,14 +6,14 @@ export const fetchLanguages = async () => {
     try {
         const baseUrl = getBaseUrl();
         // Получение CSRF токена
-        await $fetch(`${baseUrl}:8000/sanctum/csrf-cookie`,{
+        await $fetch(`${baseUrl}/sanctum/csrf-cookie`,{
             method: 'GET',
             credentials: 'include',
         });
 
         const token = decodeURIComponent(getCookie('XSRF-TOKEN'));
         // Отправка запроса на авторизацию
-        const response = await $fetch(`${baseUrl}:8000/api/all_languages`, {
+        const response = await $fetch(`${baseUrl}/api/all_languages`, {
             method: 'GET',
             credentials: 'include',
             headers: {

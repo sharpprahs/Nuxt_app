@@ -4,5 +4,5 @@ export function getBaseUrl() {
     const host = requestUrl.hostname; // 'localhost' или sharpss.ru
     // const port = requestUrl.port ? `:${requestUrl.port}` : ''; // раскомментируйте, если нужен порт
 
-    return `${protocol}//${host}`;
+    return `${protocol}//${host}:8000`;
 }

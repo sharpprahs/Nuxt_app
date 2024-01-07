@@ -270,7 +270,7 @@
          </div>
          <div class="info_message" v-if="item.alert_message != null">{{item.alert_message}}</div>
          <div class="buttons_admin_actions">
-           <button class="buttons_admin mc_bg" @click="saveData(item)">Сохранить изменения</button>
+           <button class="buttons_admin " @click="saveData(item)">Сохранить изменения</button>
            <button class="buttons_admin mcr" @click="deleteThisTask(item.number_task)">Удалить задание</button>
          </div>
        </div>
